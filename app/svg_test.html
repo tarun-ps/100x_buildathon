@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SVG Animation to Canvas</title>
+</head>
+<body>
+  <svg id="animated-svg" xmlns="http://www.w3.org/2000/svg" width="500" height="500" viewBox="0 0 500 500">
+    <defs>
+      <mask id="reveal-mask">
+        <rect x="0" y="0" width="500" height="500" fill="white" />
+        <circle id="mask-circle" cx="250" cy="250" r="0" fill="black">
+          <animate attributeName="r" from="0" to="300" dur="2s" repeatCount="indefinite" />
+        </circle>
+      </mask>
+    </defs>
+    <rect x="0" y="0" width="500" height="500" fill="blue" />
+    <text x="50" y="250" font-size="60" fill="white" mask="url(#reveal-mask)">SVG Mask Animation</text>
+  </svg>
+
+  <canvas id="canvas" width="500" height="500"></canvas>
+  <button id="start-capture">Start Capture</button>
+
+  <script>
+    const svg = document.getElementById('animated-svg');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const startButton = document.getElementById('start-capture');
+
+    const img = new Image();
+
+    startButton.addEventListener('click', () => {
+      const maskCircle = svg.querySelector('#mask-circle');
+      let frameCount = 0;
+      const totalFrames = 60; // 2 seconds at 30 FPS
+
+      const animate = () => {
+        if (frameCount < totalFrames) {
+          const progress = frameCount / totalFrames;
+          const radius = progress * 300; // Animate radius from 0 to 300
+          maskCircle.setAttribute('r', radius);
+
+          // Serialize the updated SVG and redraw it
+          const svgURL = new XMLSerializer().serializeToString(svg);
+          img.src = 'data:image/svg+xml;base64,' + btoa(svgURL);
+
+          img.onload = () => {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+          };
+
+          frameCount++;
+          requestAnimationFrame(animate);
+        }
+      };
+
+      animate();
+    });
+  </script>
+</body>
+</html>
