@@ -7,7 +7,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi import UploadFile
 import uuid
 import os
-import json
+import logging
+
+logging.basicConfig(filename="app.log", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 app = fastapi.FastAPI()
 origins = ["*"]
@@ -26,12 +29,14 @@ app.add_middleware(
 @app.post("/texttask")
 async def submit_text(data: dict):
     csv_file_id = str(uuid.uuid4())
+    logger.info(f"In server: Processing text for task {csv_file_id}")
     return JSONResponse(content=process_text(data.get("text"), csv_file_id))
 
 @app.post("/task")
 async def submit_csv(csv_file: UploadFile):
     #get the csv file from the request
     csv_file_id = str(uuid.uuid4())
+    logger.info(f"In server: Processing csv for task {csv_file_id}")
     os.makedirs(f"user_data/{csv_file_id}", exist_ok=True)
     csv_file = await csv_file.read()
     with open(f"user_data/{csv_file_id}/raw.csv", "wb") as f:

@@ -5,6 +5,10 @@ from tasks.core import generate_animated_video_horizontal_bar, generate_animated
     preliminary_analyse, generate_questions, \
     eliminate_unimportant_columns, generate_code_and_videos, extract_csv_from_text
 import os
+import logging
+
+logging.basicConfig(filename="app.log", level=logging.INFO)
+logger = logging.getLogger(__name__)
 # from dotenv import load_dotenv
 
 # load_dotenv("dev.env")
@@ -15,6 +19,7 @@ def cleanup_folders():
     os.system("rm -rf data/transformed_*.csv")
 
 def process_text(text: str, task_id: str):
+    logger.info(f"In main: Processing text for task {task_id}")
     create_task_folder(task_id)
     res = extract_csv_from_text(text, task_id)
     domain = res.title
@@ -24,6 +29,7 @@ def process_text(text: str, task_id: str):
     return process_user_text(res, task_id)
 
 def process_user_text(res: ExtractCSVFromTextResponse, task_id: str):
+    logger.info(f"In main: Generating videos for task {task_id}")
     generate_videos_for_text_input.delay(task_id, res.title)
     return {"id": task_id, "status": "processing", "domain": res.title[:100]}
 
@@ -38,6 +44,7 @@ def create_task_folder(task_id: str):
     os.makedirs(f"user_data/{task_id}/output", exist_ok=True)
 
 def process_csv(csv_file_path: str, task_id: str):
+    logger.info(f"In main: Processing csv for task {task_id}")
     cleanup_folders()
     preliminary_analyse_res = preliminary_analyse(csv_file_path)
     eliminate_unimportant_columns(csv_file_path, f"user_data/{task_id}/transformed.csv", preliminary_analyse_res.columns)

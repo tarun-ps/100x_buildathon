@@ -20,10 +20,12 @@ import os
 from schemas.core import *
 from celery import Celery
 from settings import REDIS_BROKER_URL
+import logging
 
 app = Celery(broker=REDIS_BROKER_URL)
 client = OpenAI()
-
+logging.basicConfig(filename="app.log", level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def preliminary_analyse(file_path: str) -> PreliminaryAnalyseResponse:
     df = pd.read_csv(file_path)
@@ -398,6 +400,7 @@ def generate_animated_video(file_path: str, output_file_path: str, graph_type: G
 
 @app.task
 def generate_videos_for_text_input(task_id, title):
+    logger.info(f"In task: Generating videos for task {task_id}")
     pick_graph_type_res = pick_graph_type(title, 
                                           f"user_data/{task_id}/raw.csv")
     generate_svg_res = generate_svg(title, 
@@ -406,8 +409,11 @@ def generate_videos_for_text_input(task_id, title):
     generate_animated_video(f"user_data/{task_id}/output/graph_0.svg", 
                             f"user_data/{task_id}/output/output_0.mp4", 
                             pick_graph_type_res.graph_type, task_id)
+    logger.info(f"In task: Finished generating videos for task {task_id}")
+    
 @app.task
 def generate_code_and_videos(task_id, preliminary_analyse_res, generate_questions_res):
+    logger.info(f"In task: Generating code and videos for task {task_id}")
     preliminary_analyse_res = PreliminaryAnalyseResponse.model_validate_json(preliminary_analyse_res)
     generate_questions_res = GenerateQuestionsResponse.model_validate_json(generate_questions_res)
     for i,question in enumerate(generate_questions_res.questions):
@@ -439,6 +445,7 @@ def generate_code_and_videos(task_id, preliminary_analyse_res, generate_question
                                     pick_graph_type_res.graph_type, task_id)
         except Exception as e:
             print(e)
+    logger.info(f"In task: Finished generating code and videos for task {task_id}")
 
 def extract_csv_from_text(text: str, task_id: str):
     with open(f"user_data/{task_id}/raw.txt", "w") as file:
