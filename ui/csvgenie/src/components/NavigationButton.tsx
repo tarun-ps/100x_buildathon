@@ -1,13 +1,12 @@
 'use client'
 
 import React from 'react'
-import { useRouter } from 'next/navigation'
 import { PlusIcon, EyeIcon } from '@heroicons/react/24/solid'
 
 interface NavigationButtonProps {
-  label: 'create' | 'view'
-  selectedOption: 'create' | 'view'
-  setSelectedOption: (option: 'create' | 'view') => void
+  label: 'create' | 'view' | 'task'
+  selectedOption: 'create' | 'view' | 'task'
+  setSelectedOption: (option: 'create' | 'view' | 'task') => void
 }
 
 export const NavigationButton: React.FC<NavigationButtonProps> = ({
@@ -15,7 +14,6 @@ export const NavigationButton: React.FC<NavigationButtonProps> = ({
   selectedOption,
   setSelectedOption,
 }) => {
-  const router = useRouter()
 
   const handleClick = () => {
     setSelectedOption(label)

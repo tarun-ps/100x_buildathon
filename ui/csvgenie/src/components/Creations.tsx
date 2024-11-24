@@ -6,15 +6,19 @@ interface Creation {
   domain: string;
 }
 
-const Creations: React.FC = () => {
+interface CreationsProps {
+  setSelectedTaskId: (id: string) => void;
+  setSelectedOption: (option: 'create' | 'view' | 'task') => void;
+}
+
+const Creations: React.FC<CreationsProps> = ({ setSelectedTaskId, setSelectedOption }) => {
   const [creations, setCreations] = useState<Creation[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [hasError, setHasError] = useState<boolean>(false);
-
   useEffect(() => {
     const fetchCreations = async () => {
       try {
-        const response = await fetch('http://localhost:8000/tasks');
+        const response = await fetch('https://backend.csvgenie.purpleshores.in/tasks');
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -31,6 +35,11 @@ const Creations: React.FC = () => {
     fetchCreations();
   }, []);
 
+  const handleClick = (id: string) => {
+    setSelectedOption('task')
+    setSelectedTaskId(id)
+  }
+
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -44,9 +53,11 @@ const Creations: React.FC = () => {
       <ul>
         {creations.map((creation) => (
           <li key={creation.id} className="mb-2">
-            <Link href={`/task/${creation.id}`} className="text-blue-500 hover:underline">
-              {creation.domain}
-            </Link>
+            <div className="flex items-center">
+                <Link onClick={() => handleClick(creation.id)} href="#" className="text-blue-500 hover:underline">
+                    {creation.domain}
+                </Link>
+            </div>
           </li>
         ))}
       </ul>

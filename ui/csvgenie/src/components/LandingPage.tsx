@@ -15,7 +15,7 @@ const LandingPage: React.FC = () => {
     formData.append('csv_file', csvFile);
 
     try {
-      const response = await fetch('http://localhost:8000/task', {
+      const response = await fetch('https://backend.csvgenie.purpleshores.in/task', {
         method: 'POST',
         body: formData,
       });
