@@ -1,40 +1,57 @@
+import json
 from tasks.core import generate_animated_video_horizontal_bar, generate_animated_video_pie_chart, generate_code, preliminary_analyse, generate_questions, \
     generate_svg, generate_animated_svg, generate_animated_video, pick_graph_type, \
     eliminate_unimportant_columns, GraphType
 import os
+from svglib.svglib import svg2rlg
+from reportlab.graphics import renderPM
 # from dotenv import load_dotenv
 
 # load_dotenv("dev.env")
+def cleanup_folders():
+    os.system("rm -rf output/*")
+    os.system("rm -rf code/*")
+    os.system("rm -rf frames/*")
+    os.system("rm -rf data/transformed_*.csv")
 
 def main():
+    cleanup_folders()
     preliminary_analyse_res = preliminary_analyse("data/tech-employer-totals.csv")
-    print(preliminary_analyse_res)
     eliminate_unimportant_columns("data/tech-employer-totals.csv", "data/test.csv", preliminary_analyse_res.columns)
     generate_questions_res = generate_questions(preliminary_analyse_res.domain, 
                                                 preliminary_analyse_res.columns, 
                                                 "data/test.csv")
-    print(generate_questions_res)
+    metadata = {
+        "preliminary_analyse": preliminary_analyse_res.to_dict(),
+        "questions": generate_questions_res.to_dict(),
+    }
+    with open("data/metadata.json", "w") as f:
+        json.dump(metadata, f)
+
     for i,question in enumerate(generate_questions_res.questions):
         generate_code_res = generate_code(preliminary_analyse_res.domain, 
                                           preliminary_analyse_res.columns, question, 
                                           "data/test.csv", f"code_{i}.py", 
                                           f"data/transformed_{i}.csv")
-        while True:
+        retry = 0
+        while retry < 3:
             try:
                 exec(generate_code_res.code)
                 break
             except Exception as e:
+                retry += 1
                 generate_code_res = generate_code(preliminary_analyse_res.domain, 
                                           preliminary_analyse_res.columns, question, 
-                                          "data/test.csv", f"code_{i}.py", 
+                                          "data/test.csv", f"code/code_{i}.py", 
                                           f"data/transformed_{i}.csv")
         pick_graph_type_res = pick_graph_type(question, 
                                           f"data/transformed_{i}.csv")
         print(pick_graph_type_res)
         generate_svg_res = generate_svg(question, 
                                     f"data/transformed_{i}.csv", pick_graph_type_res.graph_type,
-                                    f"graph_{i}.svg")
+                                    f"output/graph_{i}.svg")
         print(generate_svg_res)
+        generate_animated_video(f"output/graph_{i}.svg", f"output/output_{i}.mp4", pick_graph_type_res.graph_type)
     # generate_animated_svg("graph.svg")
     # generate_animated_video("graph.svg")
     # 
@@ -59,6 +76,11 @@ def generate_all_videos():
         os.system(ffmpeg_command)
         print(f"Generated video for {i}")
 
+   
 if __name__ == "__main__":
-    generate_pie_chart_video()
-    #generate_all_videos()
+    #main()
+    generate_animated_video(f"output/graph_1.svg", f"output/output_1.mp4", GraphType.BAR)
+    # generate_svg_res = generate_svg("question", 
+    #                                 f"data/transformed_3.csv", GraphType.HORIZONTAL_BAR,
+    #                                 f"output/graph_3.svg")
+    # print(generate_svg_res)

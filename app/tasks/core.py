@@ -19,35 +19,11 @@ import pygal
 from pygal.style import Style
 import numpy as np
 from bs4 import BeautifulSoup
-import cairosvg
-from xml.etree import ElementTree as ET
 import os
-from PIL import Image
+import cairosvg
+from schemas.core import *
 client = OpenAI()
 
-class GraphType(Enum):
-    LINE = "line"
-    HORIZONTAL_LINE = "horizontal_line"
-    STACKED_LINE = "stacked_line"
-    BAR = "bar"
-    STACKED_BAR = "stacked_bar"
-    HORIZONTAL_BAR = "horizontal_bar"
-    PIE = "pie"
-    DONUT = "donut"
-
-class PreliminaryAnalyseResponse(BaseModel):
-    domain: str
-    columns: list[str]
-
-class GenerateQuestionsResponse(BaseModel):
-    questions: list[str]
-
-class PickGraphTypeResponse(BaseModel):
-    graph_type: GraphType
-    reason: str
-
-class GenerateCodeResponse(BaseModel):
-    code: str
 
 def preliminary_analyse(file_path: str) -> PreliminaryAnalyseResponse:
     df = pd.read_csv(file_path)
@@ -219,11 +195,20 @@ def generate_animated_svg(svg_file_path: str) -> str:
         file.write(html)
     return svg_output_path
 
-def generate_animated_video_pie_chart(svg_file_path: str) -> str:
+def generate_animated_video_pie_chart(svg_file_path: str, width: int = 800, 
+                                      height: int = 600, 
+                                      center_x: int = 306, 
+                                      center_y: int = 280, 
+                                      radius: int = 252) -> str:
     mask = """
     <mask id="reveal-mask"> 
-        <rect x="0" y="0" width="800" height="600" fill="black"></rect>
+        <rect x="0" y="0" width="{width}" height="{height}" fill="black"></rect>
         <path d="{path_d}" fill="white"></path>
+    </mask>
+    """
+    circle_mask = """
+    <mask id="reveal-mask"> 
+        <circle cx="{center_x}" cy="{center_y}" r="{radius}" fill="white"></circle>
     </mask>
     """
     with open(svg_file_path, "r") as file:
@@ -233,20 +218,21 @@ def generate_animated_video_pie_chart(svg_file_path: str) -> str:
     #mask  = BeautifulSoup(mask, "xml")
     total_frames = 60
     output_dir = "frames"
-    center_x = 306
-    center_y = 280
-    radius = 252
-    x1 = center_x + radius * np.cos(np.radians(0))
-    y1 = center_y + radius * np.sin(np.radians(0))   
+    start_angle = -90
+    angle_increment = 360 / total_frames
+    x1 = center_x + radius * np.cos(np.radians(start_angle))
+    y1 = center_y + radius * np.sin(np.radians(start_angle))   
     os.makedirs(output_dir, exist_ok=True)
-    for frame in range(1,2,1):
+    for frame in range(total_frames + 1):
         soup = BeautifulSoup(svg, "xml")
-        angle = 360 * frame / total_frames
+        angle = start_angle + frame * angle_increment
         x2 = center_x + radius * np.cos(np.radians(angle))
         y2 = center_y + radius * np.sin(np.radians(angle))
         path_d = f"M{center_x} {center_y} L{x1} {y1} A{radius} {radius} 0 1 1 {x2} {y2} L{center_x} {center_y} Z"
-        temp_mask = mask.replace("{path_d}", path_d)
-        print(temp_mask)
+        if frame == total_frames:
+            temp_mask = circle_mask
+        else:
+            temp_mask = mask.replace("{path_d}", path_d)
         mask_soup = BeautifulSoup(temp_mask, "xml")
         defs_tag = soup.find("defs")
         if not defs_tag:
@@ -258,12 +244,19 @@ def generate_animated_video_pie_chart(svg_file_path: str) -> str:
             path["mask"] = "url(#reveal-mask)"
         svg_generated = soup.prettify()
         frame_file = os.path.join(output_dir, f"frame_{frame:04d}.png")
-        #cairosvg.svg2png(bytestring=svg_generated.encode('utf-8'), write_to=frame_file)
         with open(frame_file.replace(".png", ".svg"), "w") as file:
             file.write(svg_generated)
-        subprocess.run(["magick", frame_file.replace(".png", ".svg"), frame_file])
-        print(f"Generated frame: {frame_file}")
+        subprocess.run(["rsvg-convert", "-f", "png", "-o", frame_file, frame_file.replace(".png", ".svg")])
     return output_dir
+#to be implemented
+def get_start_angle(svg: str) -> float:
+    soup = BeautifulSoup(svg, "xml")
+    paths = soup.find_all("path", class_="slice reactive tooltip-trigger")
+    if len(paths) > 0:
+        path = paths[0]
+        d = path["d"]
+        print(d)
+    return 0
 
 def generate_animated_video_horizontal_bar(svg_file_path: str) -> str:
     mask = "<mask id=\"reveal-mask\"> <rect x=\"0\" y=\"0\" width=\"{width}\" height=\"600\" fill=\"white\" id=\"mask-rect\"></rect></mask>"
@@ -273,7 +266,12 @@ def generate_animated_video_horizontal_bar(svg_file_path: str) -> str:
     soup = BeautifulSoup(svg, "xml")
     mask  = BeautifulSoup(mask, "xml")
     #add mask as the first child of the svg tag in soup
-    soup.svg.insert(0, mask)
+    defs_tag = soup.find("defs")
+    if not defs_tag:
+        defs_tag = soup.new_tag("defs")
+        soup.svg.insert(0, defs_tag)
+    defs_tag.append(mask)
+    #soup.svg.insert(0, mask)
     paths = soup.find_all("rect", class_="rect reactive tooltip-trigger")
     for path in paths:
         path["mask"] = "url(#reveal-mask)"
@@ -287,13 +285,54 @@ def generate_animated_video_horizontal_bar(svg_file_path: str) -> str:
     for frame in range(total_frames):
         width = int(frame * (final_width / total_frames))
         svg_frame = svg_template.replace("{width}", str(width))
+        with open(os.path.join(output_dir, f"frame_{frame:04d}.svg"), "w") as file:
+            file.write(svg_frame)
         frame_file = os.path.join(output_dir, f"frame_{frame:04d}.png")
-        cairosvg.svg2png(bytestring=svg_frame, write_to=frame_file)
+        subprocess.run(["rsvg-convert", "-f", "png", "-o", frame_file, frame_file.replace(".png", ".svg")])
         #print(f"Generated frame: {frame_file}")
     return output_dir
 
 
-def generate_animated_video(svg_file_path: str) -> str:
+
+def generate_animated_video_bar(svg_file_path: str) -> str:
+    mask = "<mask id=\"reveal-mask\"> <rect x=\"0\" y=\"{y_offset}\" width=\"800\" height=\"{height}\" fill=\"white\" id=\"mask-rect\"></rect></mask>"
+    with open(svg_file_path, "r") as file:
+        svg = file.read()
+    #get all the path nodes uder a g tag wioth class called "series" using beautifulsoup
+    soup = BeautifulSoup(svg, "xml")
+    mask  = BeautifulSoup(mask, "xml")
+    #add mask as the first child of the svg tag in soup
+    defs_tag = soup.find("defs")
+    if not defs_tag:
+        defs_tag = soup.new_tag("defs")
+        soup.svg.insert(0, defs_tag)
+    defs_tag.append(mask)
+    #soup.svg.insert(0, mask)
+    paths = soup.find_all("rect", class_="rect reactive tooltip-trigger")
+    for path in paths:
+        path["mask"] = "url(#reveal-mask)"
+    svg = soup.prettify()
+    #convert svg to string
+    svg_template = str(svg)
+    final_height = 600
+    y_offset = 600
+    total_frames = 60
+    output_dir = "frames"
+    os.makedirs(output_dir, exist_ok=True)
+    for frame in range(total_frames):
+        height = int(frame * (final_height / total_frames))
+        y_offset = 600 - height
+        svg_frame = svg_template.replace("{height}", str(height)).replace("{y_offset}", str(y_offset))
+        with open(os.path.join(output_dir, f"frame_{frame:04d}.svg"), "w") as file:
+            file.write(svg_frame)
+        frame_file = os.path.join(output_dir, f"frame_{frame:04d}.png")
+        subprocess.run(["rsvg-convert", "-f", "png", "-o", frame_file, frame_file.replace(".png", ".svg")])
+        #print(f"Generated frame: {frame_file}")
+    return output_dir
+
+
+
+def generate_animated_video_line(svg_file_path: str) -> str:
     mask = "<mask id=\"reveal-mask\"> <rect x=\"0\" y=\"0\" width=\"{width}\" height=\"600\" fill=\"white\" id=\"mask-rect\"></rect></mask>"
     with open(svg_file_path, "r") as file:
         svg = file.read()
@@ -316,6 +355,28 @@ def generate_animated_video(svg_file_path: str) -> str:
         width = int(frame * (final_width / total_frames))
         svg_frame = svg_template.replace("{width}", str(width))
         frame_file = os.path.join(output_dir, f"frame_{frame:04d}.png")
-        cairosvg.svg2png(bytestring=svg_frame, write_to=frame_file)
+        with open(frame_file.replace(".png", ".svg"), "w") as file:
+            file.write(svg_frame)
+        subprocess.run(["rsvg-convert", "-f", "png", "-o", frame_file, frame_file.replace(".png", ".svg")])
         #print(f"Generated frame: {frame_file}")
     return output_dir
+
+def generate_animated_video(file_path: str, output_file_path: str, graph_type: GraphType):
+    output_dir = "frames"
+    os.makedirs(output_dir, exist_ok=True)
+    #remove any existing files in the output directory
+    for file in os.listdir(output_dir):
+        os.remove(os.path.join(output_dir, file))
+    if graph_type == GraphType.PIE:
+        generate_animated_video_pie_chart(file_path)
+    elif graph_type == GraphType.HORIZONTAL_BAR:
+        generate_animated_video_horizontal_bar(file_path)
+    elif graph_type == GraphType.LINE:
+        generate_animated_video_line(file_path)
+    elif graph_type == GraphType.BAR:
+        generate_animated_video_bar(file_path)
+    else:
+        print(f"Unsupported graph type: {graph_type}")
+    ffmpeg_command = f"ffmpeg -r 30 -f image2 -s 500x500 -i frames/frame_%04d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p {output_file_path}"
+    os.system(ffmpeg_command)
+    return

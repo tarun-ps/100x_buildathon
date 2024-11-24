@@ -1,6 +1,5 @@
-meta_employer,Donald J. Trump For President,Hillary For America
-Google/Alphabet,20024.0,1121061.48
-Microsoft,25610.78,552250.33
-Apple,3646.05,501574.97
-Facebook,3719.04,351010.38
-Salesforce,780.4,318729.93
+label,itemized_contributions,sum_max_agg
+Google/Alphabet - Donald J. Trump For President,20024.0,21202.37
+Google/Alphabet - Hillary For America,1121061.48,1167017.56
+Microsoft - Donald J. Trump For President,25610.78,27635.61
+Microsoft - Hillary For America,552250.33,585157.1

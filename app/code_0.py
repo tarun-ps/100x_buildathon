@@ -1,18 +1,23 @@
 import pandas as pd
 
-# Load the dataset from the provided CSV file path
-data = pd.read_csv('data/test.csv')
+# Load the data from the provided CSV
+input_filepath = 'data/test.csv'
+data = pd.read_csv(input_filepath)
 
-# Group by 'meta_employer' to find the maximum value of 'itemized_contributions' for each
-agg_data = data.groupby(['meta_employer'])['itemized_contributions'].max().reset_index()
+# Aggregate the contributions by 'meta_employer' across all 'committee'
+aggregated_data = data.groupby('meta_employer').agg({
+    'itemized_contributions': 'mean'
+}).reset_index()
 
-# Sort by the maximum contributions descending to find the top contributors
-agg_data = agg_data.sort_values(by='itemized_contributions', ascending=False)
+# Rename columns to merge categories and sort by contribution mean
+aggregated_data = aggregated_data.rename(columns={
+    'meta_employer': 'employer',
+    'itemized_contributions': 'average_itemized_contribution'
+})
 
-# Limit to 5-8 results to avoid overcrowding visualization charts
-agg_data = agg_data.head(8)
+# Sort by average contribution and limit to top 8
+aggregated_data = aggregated_data.sort_values(by='average_itemized_contribution', ascending=False).head(8)
 
-# Save the transformed data to the given CSV file path
-agg_data.to_csv('data/transformed_0.csv', index=False)
-
-print("Transformation complete and saved to 'data/transformed_0.csv'.")
+# Save the transformed data to a new CSV
+output_filepath = 'data/transformed_0.csv'
+aggregated_data.to_csv(output_filepath, index=False)

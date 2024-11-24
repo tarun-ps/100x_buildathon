@@ -1,19 +1,18 @@
 import pandas as pd
 
-# Load the dataset
-data = pd.read_csv('data/test.csv')
+# Load the data
+data_path = 'data/test.csv'
+df = pd.read_csv(data_path)
 
-# Group data by 'committee' and calculate the total contributions from both metrics
-aggregation = data.groupby('committee')[['itemized_contributions', 'sum_max_agg']].sum()
+# Calculate the standard deviation of contributions within each employer across committees
+df_std = df.groupby('meta_employer')['itemized_contributions'].std().reset_index()
+df_std = df_std.rename(columns={'itemized_contributions': 'std_contributions'})
 
-# Sort values by the sum of both metrics to find most contributing committees
-top_committees = aggregation.sum(axis=1).nlargest(8).index
+# Sort by standard deviation (largest first) and limit to top 5-8 rows
+max_records = 8
+df_std = df_std.sort_values(by='std_contributions', ascending=False).head(max_records)
 
-# Filter the data to include only the top committees
-data_filtered = aggregation.loc[top_committees]
+# Save the transformed dataframe
+df_std.to_csv('data/transformed_3.csv', index=False)
 
-# Sort for presentation clarity
-data_filtered = data_filtered.sort_values(by='sum_max_agg', ascending=False).reset_index()
-
-# Save the transformed data
-data_filtered.to_csv('data/transformed_3.csv', index=False)
+print("Transformation complete. Data saved to 'data/transformed_3.csv'.")

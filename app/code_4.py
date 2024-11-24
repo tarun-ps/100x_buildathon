@@ -1,28 +1,27 @@
 import pandas as pd
 
-# Load the dataset
-data = pd.read_csv('data/test.csv')
+# Load the data from the CSV file
+data_path = 'data/test.csv'
+df = pd.read_csv(data_path)
 
-# Establish the threshold for exclusive contributions
-t = 100000
+# Group data by 'committee' and extract unique meta_employers associated with them
+committee_meta_employer_counts = df.groupby('committee')['meta_employer'].nunique()
 
-# Group the data by committees
-committee_groups = data.groupby('committee').agg({
-    'itemized_contributions': ['mean', 'min', 'max'],
-    'sum_max_agg': ['mean']
-})
-committee_groups.columns = ['itemized_contributions_mean', 'itemized_contributions_min', 'itemized_contributions_max', 'sum_max_agg_mean']
-committee_groups.reset_index(inplace=True)
+# Filter committees that have contributions from only one meta_employer
+single_meta_employer_committees = committee_meta_employer_counts[committee_meta_employer_counts == 1].index
 
-# Filter committees exclusively above or below the threshold
-above_threshold = committee_groups[committee_groups['itemized_contributions_min'] > t]
-below_threshold = committee_groups[committee_groups['itemized_contributions_max'] < t]
+# Filter the dataframe to include only these committees
+filtered_df = df[df['committee'].isin(single_meta_employer_committees)]
 
-# Combine the results and choose the top 5 by 'sum_max_agg_mean'
-relevant_committees = pd.concat([above_threshold, below_threshold]).nlargest(5, 'sum_max_agg_mean')
+# Combine 'committee' and 'meta_employer' columns into a single label column
+filtered_df['label'] = filtered_df['committee'] + ' - ' + filtered_df['meta_employer']
 
-# Select columns suitable for the question: 'committee' as the label and summaries as values
-transformed_data = relevant_committees[['committee', 'itemized_contributions_mean', 'sum_max_agg_mean']]
+# Select and rename columns to include label and value columns
+result_df = filtered_df[['label', 'itemized_contributions', 'sum_max_agg']]
 
-# Save the transformed dataframe to a csv
-transformed_data.to_csv('data/transformed_4.csv', index=False)
+# To avoid overcrowding in the visualization, limit to Top 5 highest 'sum_max_agg'
+result_df = result_df.nlargest(5, 'sum_max_agg')
+
+# Save the transformed data to a new CSV file
+save_path = 'data/transformed_4.csv'
+result_df.to_csv(save_path, index=False)

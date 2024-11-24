@@ -4,19 +4,23 @@ import pandas as pd
 data_path = 'data/test.csv'
 df = pd.read_csv(data_path)
 
-# Compute the average itemized contribution per 'meta_employer' and 'committee'
-avg_df = df.groupby(['meta_employer', 'committee'], as_index=False)['itemized_contributions'].mean()
+# Sum contributions by employer
+df_grouped = df.groupby('meta_employer')[['itemized_contributions', 'sum_max_agg']].sum()
 
-# Pivot the dataframe to have committees as the columns for value comparison
-pivot_df = avg_df.pivot(index='meta_employer', columns='committee', values='itemized_contributions')
+# Identify the top two employers by total contributions
+top_employers = df_grouped.nlargest(2, 'sum_max_agg')
 
-# Select top 5 meta_employers based on average contribution across committees
-pivot_df['average_contribution'] = pivot_df.mean(axis=1)
-pivot_df = pivot_df.nlargest(5, 'average_contribution').drop(columns=['average_contribution'])
+# Filter data for the top two employers
+df_top = df[df['meta_employer'].isin(top_employers.index)]
 
-# Reset Index
-transformed_df = pivot_df.reset_index()
+# Combine category columns (if applicable)
+df_top['label'] = df_top['meta_employer'] + ' - ' + df_top['committee']
 
-# Save the resulting dataframe to a new CSV file
+# Group by 'label' for visualization purposes
+df_transformed = df_top.groupby('label')[['itemized_contributions', 'sum_max_agg']].sum().reset_index()
+
+# Save the transformed dataframe
 output_path = 'data/transformed_2.csv'
-transformed_df.to_csv(output_path, index=False)
+df_transformed.to_csv(output_path, index=False)
+
+print("Transformed dataframe saved to:", output_path)
