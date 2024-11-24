@@ -165,3 +165,4 @@ app/frames/
 app/output/
 app/code/
 app/data/transformed_*.csv
+app/user_data/

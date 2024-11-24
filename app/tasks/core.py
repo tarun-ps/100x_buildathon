@@ -42,6 +42,11 @@ def preliminary_analyse(file_path: str) -> PreliminaryAnalyseResponse:
 
 def eliminate_unimportant_columns(input_file_path: str, output_file_path: str, columns: list[str]) -> pd.DataFrame:
     df = pd.read_csv(input_file_path)
+    for column in columns:
+        if column not in df.columns:
+            print(f"Column {column} not found in dataframe")
+            df.to_csv(output_file_path, index=False)
+            return
     df = df[columns]
     df.to_csv(output_file_path, index=False)
     return
@@ -72,7 +77,8 @@ def generate_code(domain: str, columns: list[str], question: str,
                                                    question=question, 
                                                    data_description=data_description, 
                                                    data_sample=data_sample,
-                                                   output_path=output_data_file_path)
+                                                   output_path=output_data_file_path,
+                                                   input_path=file_path)
     completion = client.beta.chat.completions.parse(
         model=OPENAI_GPT4_O_MODEL,
         response_format=GenerateCodeResponse,
@@ -195,7 +201,7 @@ def generate_animated_svg(svg_file_path: str) -> str:
         file.write(html)
     return svg_output_path
 
-def generate_animated_video_pie_chart(svg_file_path: str, width: int = 800, 
+def generate_animated_video_pie_chart(svg_file_path: str, task_id: str, width: int = 800, 
                                       height: int = 600, 
                                       center_x: int = 306, 
                                       center_y: int = 280, 
@@ -217,7 +223,7 @@ def generate_animated_video_pie_chart(svg_file_path: str, width: int = 800,
     
     #mask  = BeautifulSoup(mask, "xml")
     total_frames = 60
-    output_dir = "frames"
+    output_dir = f"user_data/{task_id}/frames"
     start_angle = -90
     angle_increment = 360 / total_frames
     x1 = center_x + radius * np.cos(np.radians(start_angle))
@@ -258,7 +264,7 @@ def get_start_angle(svg: str) -> float:
         print(d)
     return 0
 
-def generate_animated_video_horizontal_bar(svg_file_path: str) -> str:
+def generate_animated_video_horizontal_bar(svg_file_path: str, task_id: str) -> str:
     mask = "<mask id=\"reveal-mask\"> <rect x=\"0\" y=\"0\" width=\"{width}\" height=\"600\" fill=\"white\" id=\"mask-rect\"></rect></mask>"
     with open(svg_file_path, "r") as file:
         svg = file.read()
@@ -280,7 +286,7 @@ def generate_animated_video_horizontal_bar(svg_file_path: str) -> str:
     svg_template = str(svg)
     final_width = 800
     total_frames = 60
-    output_dir = "frames"
+    output_dir = f"user_data/{task_id}/frames"
     os.makedirs(output_dir, exist_ok=True)
     for frame in range(total_frames):
         width = int(frame * (final_width / total_frames))
@@ -294,7 +300,7 @@ def generate_animated_video_horizontal_bar(svg_file_path: str) -> str:
 
 
 
-def generate_animated_video_bar(svg_file_path: str) -> str:
+def generate_animated_video_bar(svg_file_path: str, task_id: str) -> str:
     mask = "<mask id=\"reveal-mask\"> <rect x=\"0\" y=\"{y_offset}\" width=\"800\" height=\"{height}\" fill=\"white\" id=\"mask-rect\"></rect></mask>"
     with open(svg_file_path, "r") as file:
         svg = file.read()
@@ -317,7 +323,7 @@ def generate_animated_video_bar(svg_file_path: str) -> str:
     final_height = 600
     y_offset = 600
     total_frames = 60
-    output_dir = "frames"
+    output_dir = f"user_data/{task_id}/frames"
     os.makedirs(output_dir, exist_ok=True)
     for frame in range(total_frames):
         height = int(frame * (final_height / total_frames))
@@ -332,7 +338,7 @@ def generate_animated_video_bar(svg_file_path: str) -> str:
 
 
 
-def generate_animated_video_line(svg_file_path: str) -> str:
+def generate_animated_video_line(svg_file_path: str, task_id: str) -> str:
     mask = "<mask id=\"reveal-mask\"> <rect x=\"0\" y=\"0\" width=\"{width}\" height=\"600\" fill=\"white\" id=\"mask-rect\"></rect></mask>"
     with open(svg_file_path, "r") as file:
         svg = file.read()
@@ -349,7 +355,7 @@ def generate_animated_video_line(svg_file_path: str) -> str:
     svg_template = str(svg)
     final_width = 800
     total_frames = 60
-    output_dir = "frames"
+    output_dir = f"user_data/{task_id}/frames"
     os.makedirs(output_dir, exist_ok=True)
     for frame in range(total_frames):
         width = int(frame * (final_width / total_frames))
@@ -361,22 +367,30 @@ def generate_animated_video_line(svg_file_path: str) -> str:
         #print(f"Generated frame: {frame_file}")
     return output_dir
 
-def generate_animated_video(file_path: str, output_file_path: str, graph_type: GraphType):
+def generate_animated_video(file_path: str, output_file_path: str, graph_type: GraphType, task_id: str):
     output_dir = "frames"
     os.makedirs(output_dir, exist_ok=True)
     #remove any existing files in the output directory
     for file in os.listdir(output_dir):
         os.remove(os.path.join(output_dir, file))
     if graph_type == GraphType.PIE:
-        generate_animated_video_pie_chart(file_path)
+        generate_animated_video_pie_chart(file_path, task_id)
+    elif graph_type == GraphType.DONUT:
+        generate_animated_video_pie_chart(file_path, task_id)
     elif graph_type == GraphType.HORIZONTAL_BAR:
-        generate_animated_video_horizontal_bar(file_path)
+        generate_animated_video_horizontal_bar(file_path, task_id)
     elif graph_type == GraphType.LINE:
-        generate_animated_video_line(file_path)
+        generate_animated_video_line(file_path, task_id)
     elif graph_type == GraphType.BAR:
-        generate_animated_video_bar(file_path)
+        generate_animated_video_bar(file_path, task_id)
+    elif graph_type == GraphType.STACKED_BAR:
+        generate_animated_video_bar(file_path, task_id)
+    elif graph_type == GraphType.HORIZONTAL_LINE:
+        generate_animated_video_line(file_path, task_id)
+    elif graph_type == GraphType.STACKED_LINE:
+        generate_animated_video_bar(file_path, task_id)
     else:
         print(f"Unsupported graph type: {graph_type}")
-    ffmpeg_command = f"ffmpeg -r 30 -f image2 -s 500x500 -i frames/frame_%04d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p {output_file_path}"
+    ffmpeg_command = f"ffmpeg -r 30 -f image2 -s 500x500 -i user_data/{task_id}/frames/frame_%04d.png -vcodec libx264 -crf 25 -pix_fmt yuv420p {output_file_path}"
     os.system(ffmpeg_command)
     return

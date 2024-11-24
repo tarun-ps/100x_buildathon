@@ -1,37 +1,266 @@
-meta_employer,committee,itemized_contributions,sum_max_agg
-Adobe,Donald J. Trump For President,1082.4,1082.4
-Adobe,Hillary For America,68245.01,73860.48
-Airbnb,Hillary For America,42723.21,43987.37
-Amazon,Donald J. Trump For President,2401.6,2912.97
-Amazon,Hillary For America,255615.94,278727.53
-Apple,Donald J. Trump For President,3646.05,4819.02
-Apple,Hillary For America,501574.97,536470.97
-Box,Hillary For America,13635.0,14030.0
-Cisco,Donald J. Trump For President,21386.84,23421.36
-Cisco,Hillary For America,135871.38,153297.16
-Dell,Donald J. Trump For President,11402.47,13397.85
-Dell,Hillary For America,55987.41,66572.09
-Ebay,Hillary For America,93539.09,96029.64
-Facebook,Donald J. Trump For President,3719.04,3641.03
-Facebook,Hillary For America,351010.38,362837.11
-Google/Alphabet,Donald J. Trump For President,20024.0,21202.37
-Google/Alphabet,Hillary For America,1121061.48,1167017.56
-Hewlett-Packard,Donald J. Trump For President,10131.55,11433.0
-Hewlett-Packard,Hillary For America,152803.5,170437.36
-IBM,Donald J. Trump For President,24732.96,28114.52
-IBM,Hillary For America,276366.49,327167.48
-Intel,Donald J. Trump For President,4408.41,5553.68
-Intel,Hillary For America,124969.46,139094.71
-Microsoft,Donald J. Trump For President,25610.78,27635.61
-Microsoft,Hillary For America,552250.33,585157.1
-Netflix,Donald J. Trump For President,250.0,250.0
-Netflix,Hillary For America,67898.27,75868.71
-Oracle,Donald J. Trump For President,11292.54,12798.87
-Oracle,Hillary For America,161048.43,187520.87
-Salesforce,Donald J. Trump For President,780.4,1155.4
-Salesforce,Hillary For America,318729.93,331047.44
-Square,Hillary For America,23314.4,24398.45
-Twitter,Donald J. Trump For President,3800.0,3950.0
-Twitter,Hillary For America,86338.81,92371.4
-Uber,Donald J. Trump For President,1259.6,1400.6
-Uber,Hillary For America,36986.3,42670.84
+year,film,actor,characters,imdb,words,sentences
+1989,born-on-the-fourth-of-july,Dale Dye,COLONEL,http://www.imdb.com/name/nm0245653/,216.0,15.0
+1989,born-on-the-fourth-of-july,David Warshofsky,LIEUTENANT,http://www.imdb.com/name/nm0913175/,290.0,40.0
+1989,born-on-the-fourth-of-july,Frank Whaley,TIMMY,http://www.imdb.com/name/nm0001844/,104.0,14.0
+1989,born-on-the-fourth-of-july,Jerry Levine,STEVE,http://www.imdb.com/name/nm0505842/,300.0,35.0
+1989,born-on-the-fourth-of-july,John F. Kennedy,KENNEDY,,217.0,5.0
+1989,born-on-the-fourth-of-july,Josh Evans,TOMMY,http://www.imdb.com/name/nm0262923/,140.0,22.0
+1989,born-on-the-fourth-of-july,Kyra Sedgwick,DONNA,http://www.imdb.com/name/nm0001718/,188.0,30.0
+1989,born-on-the-fourth-of-july,Lane R. Davis,STEVIE,http://www.imdb.com/name/nm0205001/,366.0,34.0
+1989,born-on-the-fourth-of-july,Markus Flanagan,DOCTOR,http://www.imdb.com/name/nm0281074/,161.0,16.0
+1989,born-on-the-fourth-of-july,Norma Moore,MOM,http://www.imdb.com/name/nm0601689/,348.0,45.0
+1989,born-on-the-fourth-of-july,Raymond J. Barry,DAD,http://www.imdb.com/name/nm0000855/,189.0,20.0
+1989,born-on-the-fourth-of-july,Richard Grusin,COACH,://www.imdb.com/name/nm0344702/,258.0,48.0
+1989,born-on-the-fourth-of-july,Rocky Carroll,JIMMY,http://www.imdb.com/name/nm0140969/,208.0,15.0
+1989,born-on-the-fourth-of-july,Tom Berenger,MARINE SGT,http://www.imdb.com/name/nm0000297/,296.0,18.0
+1989,born-on-the-fourth-of-july,Tom Cruise,RON + RONNIE,http://www.imdb.com/name/nm0000129/,1870.0,263.0
+1989,dead-poets-society,Alexandra Powers,CHRIS,http://www.imdb.com/name/nm0694490/,221.0,69.0
+1989,dead-poets-society,Allelon Ruggiero,MEEKS,http://www.imdb.com/name/nm0749456/,238.0,55.0
+1989,dead-poets-society,Dylan Kussman,CAMERON,http://www.imdb.com/name/nm0476378/,350.0,71.0
+1989,dead-poets-society,Ethan Hawke,TODD,http://www.imdb.com/name/nm0000160/,417.0,106.0
+1989,dead-poets-society,Gale Hansen,CHARLIE,http://www.imdb.com/name/nm0360796/,801.0,206.0
+1989,dead-poets-society,James Waterston,PITTS,http://www.imdb.com/name/nm0914209/,206.0,54.0
+1989,dead-poets-society,Josh Charles,KNOX,http://www.imdb.com/name/nm0001038/,541.0,146.0
+1989,dead-poets-society,Kurtwood Smith,MR PERRY + MR. PERRY,http://www.imdb.com/name/nm0001748/,220.0,53.0
+1989,dead-poets-society,Norman Lloyd,MR NOLAN + MR. NOLAN,http://www.imdb.com/name/nm0516093/,341.0,80.0
+1989,dead-poets-society,Robert Sean Leonard,NEIL,http://www.imdb.com/name/nm0000494/,956.0,228.0
+1989,dead-poets-society,Robin Williams,KEATING,http://www.imdb.com/name/nm0000245/,926.0,221.0
+1989,driving-miss-daisy,Alvin M. Sugarman,DR. WEIL,http://www.imdb.com/name/nm0837393/,149.0,10.0
+1989,driving-miss-daisy,Dan Aykroyd,BOOLIE,http://www.imdb.com/name/nm0000101/,2040.0,326.0
+1989,driving-miss-daisy,Esther Rolle,IDELLA,http://www.imdb.com/name/nm0738354/,188.0,34.0
+1989,driving-miss-daisy,Jessica Tandy,DAISY + |. DAISY,http://www.imdb.com/name/nm0001788/,3826.0,613.0
+1989,driving-miss-daisy,Morgan Freeman,HOKE,http://www.imdb.com/name/nm0000151/,3343.0,510.0
+1989,driving-miss-daisy,Patti LuPone,FLORINE,http://www.imdb.com/name/nm0526985/,129.0,27.0
+1989,field-of-dreams,Amy Madigan,ANNIE,http://www.imdb.com/name/nm0001496/,1501.0,233.0
+1989,field-of-dreams,Anne Seymour,VEDA,http://www.imdb.com/name/nm0786800/,112.0,13.0
+1989,field-of-dreams,Burt Lancaster,DOC + DOC GRAHAM,://Burt Lancaster,546.0,59.0
+1989,field-of-dreams,Gaby Hoffmann,KARIN,http://www.imdb.com/name/nm0000451/,235.0,39.0
+1989,field-of-dreams,James Earl Jones,MANN,http://www.imdb.com/name/nm0000469/,1369.0,207.0
+1989,field-of-dreams,Kevin Costner,RAY,http://www.imdb.com/name/nm0000126/,4163.0,612.0
+1989,field-of-dreams,Ray Liotta,SHOELESS JOE,http://www.imdb.com/name/nm0000501/,465.0,73.0
+1989,field-of-dreams,Timothy Busfield,MARK,http://www.imdb.com/name/nm0124079/,542.0,63.0
+1989,my-left-foot,Adrian Dunbar,PETER,http://www.imdb.com/name/nm0001160/,151.0,27.0
+1989,my-left-foot,Brenda Fricker,MRS. BROWN,http://www.imdb.com/name/nm0002084/,1365.0,276.0
+1989,my-left-foot,Cyril Cusack,CASTLEWELLAND + READER,http://www.imdb.com/name/nm0159258/,349.0,43.0
+1989,my-left-foot,Daniel Day-Lewis,CHRISTY,http://www.imdb.com/name/nm0000358/,1101.0,258.0
+1989,my-left-foot,Declan Croghan,TOM,http://www.imdb.com/name/nm0188520/,128.0,24.0
+1989,my-left-foot,Eanna MacLiam,BENNY,http://www.imdb.com/name/nm0533942/,147.0,45.0
+1989,my-left-foot,Fiona Shaw,DR. COLE,http://www.imdb.com/name/nm0789716/,459.0,94.0
+1989,my-left-foot,Raymond McAnally,MR. BROWN,http://www.imdb.com/name/nm2197708/,715.0,144.0
+1989,my-left-foot,Ruth McCabe,MARY,http://www.imdb.com/name/nm0564502/,334.0,69.0
+2015,bridge-of-spies,Alan Alda,WATTERS,https://pro-labs.imdb.com/name/nm0000257/,228.0,24.0
+2015,bridge-of-spies,Amy Ryan,MARY,https://pro-labs.imdb.com/name/nm0752407/,279.0,41.0
+2015,bridge-of-spies,Austin Stowell,POWERS,https://pro-labs.imdb.com/name/nm3271473/,122.0,33.0
+2015,bridge-of-spies,Burghart Klaußner,OTT,https://pro-labs.imdb.com/name/nm0458460/,147.0,23.0
+2015,bridge-of-spies,Dakin Matthews,JUDGE BYERS,https://pro-labs.imdb.com/name/nm0559977/,469.0,53.0
+2015,bridge-of-spies,David Wilson Barnes,MICHENER,https://pro-labs.imdb.com/name/nm1477818/,247.0,23.0
+2015,bridge-of-spies,John Rue,GOODNOUGH,https://pro-labs.imdb.com/name/nm1600051/,135.0,19.0
+2015,bridge-of-spies,Joshua Harto,BATES,https://pro-labs.imdb.com/name/nm0367176/,121.0,17.0
+2015,bridge-of-spies,Mark Rylance,ABEL,https://pro-labs.imdb.com/name/nm0753314/,685.0,120.0
+2015,bridge-of-spies,Michael Gaston,WILLIAMS,https://pro-labs.imdb.com/name/nm0309461/,513.0,49.0
+2015,bridge-of-spies,Michael Gor,SCHISCHKIN,https://pro-labs.imdb.com/name/nm0330853/,555.0,70.0
+2015,bridge-of-spies,Noah Schnapp,ROGER,https://pro-labs.imdb.com/name/nm6907855/,226.0,20.0
+2015,bridge-of-spies,Peter McRobbie,DULLES,https://pro-labs.imdb.com/name/nm0574513/,395.0,46.0
+2015,bridge-of-spies,Scott Shepherd,HOFFMAN,https://pro-labs.imdb.com/name/nm0791864/,927.0,127.0
+2015,bridge-of-spies,Sebastian Koch,VOGEL,https://pro-labs.imdb.com/name/nm0462407/,509.0,63.0
+2015,bridge-of-spies,Tom Hanks,DONOVAN,https://pro-labs.imdb.com/name/nm0000158/,4257.0,603.0
+2015,bridge-of-spies,Will Rogers,PRYOR,https://pro-labs.imdb.com/name/nm3283577/,100.0,20.0
+2015,brooklyn,Brid Brennan,MISS KELLY,http://www.imdb.com/name/nm0107261/,383.0,49.0
+2015,brooklyn,Denis Conway,MR BROWN,http://www.imdb.com/name/nm0176669/,119.0,11.0
+2015,brooklyn,Domhnall Gleeson,JIM,http://www.imdb.com/name/nm1727304/,667.0,76.0
+2015,brooklyn,Eileen O'Higgins,NANCY,http://www.imdb.com/name/nm3640226/,318.0,42.0
+2015,brooklyn,Emily Bett Rickards,PATTY,http://www.imdb.com/name/nm4703025/,237.0,39.0
+2015,brooklyn,Emory Cohen,TONY,http://www.imdb.com/name/nm1710309/,1508.0,194.0
+2015,brooklyn,Eva Birthistle,GEORGINA,http://www.imdb.com/name/nm0083795/,424.0,68.0
+2015,brooklyn,Eve Macklin,DIANA,http://www.imdb.com/name/nm2984440/,216.0,28.0
+2015,brooklyn,Fiona Glascott,ROSE,http://www.imdb.com/name/nm0321800/,212.0,28.0
+2015,brooklyn,Iarla O'Lionaird,FRANKIE,http://www.imdb.com/name/nm0641644/,168.0,28.0
+2015,brooklyn,Jane Brennan,MARY,http://www.imdb.com/name/nm1120609/,607.0,84.0
+2015,brooklyn,Jenn Murray,DOLORES,http://www.imdb.com/name/nm2893183/,137.0,22.0
+2015,brooklyn,Jessica Pare,MISS FORTINI,http://www.imdb.com/name/nm0664175/,381.0,56.0
+2015,brooklyn,Jim Broadbent,FATHER FLOOD,http://www.imdb.com/name/nm0000980/,702.0,83.0
+2015,brooklyn,Julie Walters,MRS KEHOE,http://www.imdb.com/name/nm0910278/,796.0,76.0
+2015,brooklyn,Nora-Jane Noone,SHEILA,http://www.imdb.com/name/nm1172901/,200.0,26.0
+2015,brooklyn,Samantha Munro,DOROTHY,http://www.imdb.com/name/nm2329553/,159.0,20.0
+2015,brooklyn,Saoirse Ronan,EILIS,http://www.imdb.com/name/nm1519680/,3357.0,539.0
+2015,mad-max,Abbey Lee,THE DAG:,http://www.imdb.com/name/nm3880181/,197.0,43.0
+2015,mad-max,Charlize Theron,FURIOSA:,http://www.imdb.com/name/nm0000234/,667.0,135.0
+2015,mad-max,Courtney Eaton,CHEEDO THE FRAGILE: + CHEEDO:,http://www.imdb.com/name/nm5196907/,108.0,25.0
+2015,mad-max,Gillian Jones,VUVALINI :,http://www.imdb.com/name/nm0428143/,203.0,45.0
+2015,mad-max,Hugh Keays-Byrne,IMMORTAN JOE:,http://www.imdb.com/name/nm0117412/,206.0,40.0
+2015,mad-max,Jon Iles,THE ACE:,http://www.imdb.com/name/nm7485089,137.0,36.0
+2015,mad-max,Josh Helman,SLIT:,http://www.imdb.com/name/nm2890541/,116.0,34.0
+2015,mad-max,Melissa Jaffer,KEEPER OF THE SEEDS:,http://www.imdb.com/name/nm0415513/,121.0,32.0
+2015,mad-max,Nicholas Hoult,NUX:,http://www.imdb.com/name/nm0396558/,515.0,112.0
+2015,mad-max,Riley Keough,CAPABLE:,http://www.imdb.com/name/nm2142336/,156.0,38.0
+2015,mad-max,Tom Hardy,MAX:,http://www.imdb.com/name/nm0362766/,492.0,115.0
+2015,mad-max,Zoe Kravitz,TOAST:,http://www.imdb.com/name/nm2368789/,212.0,39.0
+2015,room,Amanda Brugel,OFFICER PARKER,http://www.imdb.com/name/nm0115760/,271.0,56.0
+2015,room,Brie Larson,MA,http://www.imdb.com/name/nm0488953/,3775.0,623.0
+2015,room,Cas Anvar,DR. MITTAL,http://www.imdb.com/name/nm0031679/,226.0,29.0
+2015,room,Jacob Tremblay,JACK,http://www.imdb.com/name/nm5016878/,1894.0,349.0
+2015,room,Jee-Yun Lee,NEWS ANCHOR,http://www.imdb.com/name/nm1495664/,119.0,7.0
+2015,room,Joan Allen,NANCY,http://www.imdb.com/name/nm0000260/,663.0,124.0
+2015,room,Megan Park,LAURA,http://www.imdb.com/name/nm1177914/,221.0,37.0
+2015,room,Randal Edwards,LAWYER,http://www.imdb.com/name/nm2325851/,163.0,15.0
+2015,room,Sean Bridgers,OLD NICK,http://www.imdb.com/name/nm0108703/,378.0,66.0
+2015,room,Tom McCamus,LEO,http://www.imdb.com/name/nm0564805/,274.0,56.0
+2015,room,Wendy Crewson,HOSTESS,http://www.imdb.com/name/nm0187724/,194.0,21.0
+2015,room,William H. Macy,ROBERT,http://www.imdb.com/name/nm0000513/,195.0,31.0
+2015,spotlight,Billy Crudup,ERIC MACLEISH,http://www.imdb.com/name/nm0001082/,451.0,60.0
+2015,spotlight,Brian d'Arcy James,MATT,http://www.imdb.com/name/nm0195421,751.0,130.0
+2015,spotlight,Jamey Sheridan,JIM,http://www.imdb.com/name/nm0792177/,327.0,52.0
+2015,spotlight,Jimmy LeBlanc,PATRICK MCSORLEY,http://www.imdb.com/name/nm2415295/,231.0,30.0
+2015,spotlight,John Slattery,BEN,http://www.imdb.com/name/nm0805476/,958.0,165.0
+2015,spotlight,Len Cariou,CARDINAL LAW,http://www.imdb.com/name/nm0137230/,190.0,22.0
+2015,spotlight,Liev Schreiber,MARTY,http://www.imdb.com/name/nm0000630/,1163.0,144.0
+2015,spotlight,Mark Ruffalo,MIKE,http://www.imdb.com/name/nm0749263/,2604.0,419.0
+2015,spotlight,Michael Cyril Creighton,JOE CROWLEY,http://www.imdb.com/name/nm1644112/,504.0,70.0
+2015,spotlight,Michael Keaton,ROBBY,http://www.imdb.com/name/nm0000474/,2412.0,400.0
+2015,spotlight,Neal Huff,SAVIANO,http://www.imdb.com/name/nm0400223/,584.0,61.0
+2015,spotlight,Paul Guilfoyle,PETE CONLEY + PETER CONLEY,http://www.imdb.com/name/nm0002117,303.0,35.0
+2015,spotlight,Rachel McAdams,SACHA,http://www.imdb.com/name/nm1046097/,1338.0,209.0
+2015,spotlight,Richard Jenkins,SIPE,http://www.imdb.com/name/nm0420955/,346.0,40.0
+2015,spotlight,Stanley Tucci,GARABEDIAN,http://www.imdb.com/name/nm0001804/,951.0,138.0
+2015,the-big-short,Adepero Oduye,KATHY TAO,http://www.imdb.com/name/nm1323822/,209.0,28.0
+2015,the-big-short,Brad Pitt,BEN,http://www.imdb.com/name/nm0000093/,704.0,96.0
+2015,the-big-short,Anthony Bourdain,ANTHONY BOURDAIN + BOURDAIN,http://www.imdb.com/name/nm1113529/,256.0,20.0
+2015,the-big-short,Byron Mann,MR. CHAU,http://www.imdb.com/name/nm0542677/,145.0,20.0
+2015,the-big-short,Christian Bale,MICHAEL BURRY + MIKE,http://www.imdb.com/name/nm0000288/,1622.0,204.0
+2015,the-big-short,Finn Wittrock,JAMIE,http://www.imdb.com/name/nm1587729/,1041.0,153.0
+2015,the-big-short,Hamish Linklater,PORTER,http://www.imdb.com/name/nm0512934/,284.0,48.0
+2015,the-big-short,Hunter Burke,YOUNG ANALYST,http://www.imdb.com/name/nm3363398/,136.0,27.0
+2015,the-big-short,Jeremy Strong,VINNY,http://www.imdb.com/name/nm0834989/,736.0,122.0
+2015,the-big-short,John Magaro,CHARLIE,http://www.imdb.com/name/nm1910274/,1137.0,173.0
+2015,the-big-short,Karen Gillan,EVIE,http://www.imdb.com/name/nm2394794/,109.0,14.0
+2015,the-big-short,Lyle Brocato,CASEY,http://www.imdb.com/name/nm1736154/,114.0,13.0
+2015,the-big-short,Marisa Tomei,CYNTHIA,http://www.imdb.com/name/nm0000673/,448.0,72.0
+2015,the-big-short,Melissa Leo,GEORGIA,http://www.imdb.com/name/nm0502425/,196.0,26.0
+2015,the-big-short,Rafe Spall,DANNY,http://www.imdb.com/name/nm1245863/,478.0,81.0
+2015,the-big-short,Richard Thaler,DR. THALER,,256.0,28.0
+2015,the-big-short,Ron Centanni,REAL ESTATE AGENT,http://www.imdb.com/name/nm5090072/,128.0,15.0
+2015,the-big-short,Rudy Eisenzopf,LEWIS RANIERI,http://www.imdb.com/name/nm5647921/,136.0,17.0
+2015,the-big-short,Ryan Gosling,JARED + JARED VENNETT,http://www.imdb.com/name/nm0331516/,1895.0,183.0
+2015,the-big-short,Scarlett Johansson,SCARLETT JOHANSSON,http://www.imdb.com/title/nm0424060/,171.0,13.0
+2015,the-big-short,Selena Gomez,SELENA GOMEZ,http://www.imdb.com/name/nm1411125/,161.0,23.0
+2015,the-big-short,Steve Carell,MARK + MARK BAUM,http://www.imdb.com/name/nm0136797/,2491.0,356.0
+2015,the-big-short,Tracy Letts,LAWRENCE FIELDS,http://www.imdb.com/name/nm0504832/,388.0,50.0
+2015,the-martian,Aksel Hennie,VOGEL,http://www.imdb.com/name/nm0377336/,198.0,39.0
+2015,the-martian,Benedict Wong,BRUCE,http://www.imdb.com/name/nm0938950/,403.0,54.0
+2015,the-martian,Chiwetel Ejiofor,VINCENT,http://www.imdb.com/name/nm0252230/,1320.0,175.0
+2015,the-martian,Donald Glover,RICH,http://www.imdb.com/name/nm2255973/,225.0,27.0
+2015,the-martian,Jeff Daniels,TEDDY,http://www.imdb.com/name/nm0001099/,1188.0,143.0
+2015,the-martian,Jessica Chastain,LEWIS,http://www.imdb.com/name/nm1567113/,1269.0,223.0
+2015,the-martian,Kate Mara,JOHANSSEN,http://www.imdb.com/name/nm0544718/,551.0,104.0
+2015,the-martian,Kristen Wiig,ANNIE,http://www.imdb.com/name/nm1325419/,402.0,47.0
+2015,the-martian,Mackenzie Davis,MINDY,http://www.imdb.com/name/nm4496875/,266.0,45.0
+2015,the-martian,Matt Damon,MARK,http://www.imdb.com/name/nm0000354/,3018.0,372.0
+2015,the-martian,Michael Peña,MARTINEZ,http://www.imdb.com/name/nm0671567/,517.0,93.0
+2015,the-martian,Nick Mohammed,TIM,http://www.imdb.com/name/nm2945137/,124.0,16.0
+2015,the-martian,Sean Bean,MITCH,http://www.imdb.com/name/nm0000293/,735.0,113.0
+2015,the-martian,Sebastian Stan,BECK,http://www.imdb.com/name/nm1659221/,334.0,56.0
+2015,the-revenant,Domhnall Gleeson,HENRY,http://www.imdb.com/name/nm1727304/,768.0,104.0
+2015,the-revenant,Kristoffer Joner,MURPHY,http://www.imdb.com/name/nm0427379/,116.0,15.0
+2015,the-revenant,Leonardo DiCaprio,GLASS,http://www.imdb.com/name/nm0000138/,1061.0,167.0
+2015,the-revenant,Paul Anderson,ANDERSON,http://www.imdb.com/name/nm2167957/,153.0,18.0
+2015,the-revenant,Tom Hardy,FITZGERALD,http://www.imdb.com/name/nm0362766/,1538.0,176.0
+2015,the-revenant,Will Poulter,BRIDGER,http://www.imdb.com/name/nm2401020/,369.0,69.0
+2017,call-me-by-your-name,Amira Casar,ANNELLA,http://www.imdb.com/name/nm0142972/,609.0,85.0
+2017,call-me-by-your-name,Armie Hammer,OLIVER,http://www.imdb.com/name/nm2309517/,2051.0,333.0
+2017,call-me-by-your-name,Esther Garrel,MARZIA,http://www.imdb.com/name/nm1081257/,586.0,101.0
+2017,call-me-by-your-name,Michael Stuhlbarg,PERLMAN,http://www.imdb.com/name/nm0836121/,1328.0,144.0
+2017,call-me-by-your-name,Timothee Chalamet,ELIO,http://www.imdb.com/name/nm3154303/,1911.0,345.0
+2017,call-me-by-your-name,Victoire Du Bois,CHIARA,http://www.imdb.com/name/nm4973460/,188.0,40.0
+2017,darkest-hour,Ben Mendelsohn,GEORGE VI + KING GEORGE VI,http://www.imdb.com/name/nm0578853/,528.0,88.0
+2017,darkest-hour,David Schofield,ATTLEE,http://www.imdb.com/name/nm0774516/,177.0,23.0
+2017,darkest-hour,David Strathairn,ROOSEVELT,http://www.imdb.com/name/nm0000657/,147.0,27.0
+2017,darkest-hour,Gary Oldman,CHURCHILL + WINSTON,http://www.imdb.com/name/nm0000198/,4588.0,587.0
+2017,darkest-hour,Joe Armstrong,JOHN EVANS,http://www.imdb.com/name/nm1006297/,188.0,26.0
+2017,darkest-hour,Kristin Scott Thomas,CLEMMIE,http://www.imdb.com/title/tt4555426/characters/nm0000218,564.0,73.0
+2017,darkest-hour,Lily James,ELIZABETH + ELIZABETH LAYTON,http://www.imdb.com/name/nm4141252/,305.0,60.0
+2017,darkest-hour,Malcolm Storry,GENERAL IRONSIDE + IRONSIDE,http://www.imdb.com/name/nm0832695/,389.0,44.0
+2017,darkest-hour,Ronald Pickup,CHAMBERLAIN,http://www.imdb.com/name/nm0681975/,286.0,44.0
+2017,darkest-hour,Samuel West,EDEN,http://www.imdb.com/name/nm0922335/,110.0,20.0
+2017,darkest-hour,Stephen Dillane,HALIFAX,http://www.imdb.com/name/nm0226820/,752.0,85.0
+2017,dunkirk,Barry Keoghan,GEORGE,http://www.imdb.com/name/nm4422686/,103.0,23.0
+2017,dunkirk,Cillian Murphy,SHIVERING SOLDIER,http://www.imdb.com/name/nm0614165/,122.0,32.0
+2017,dunkirk,Fionn Whitehead,TOMMY,http://www.imdb.com/name/nm7887725/,375.0,55.0
+2017,dunkirk,Harry Styles,ALEX,http://www.imdb.com/name/nm4089170/,351.0,75.0
+2017,dunkirk,Jack Lowden,COLLINS,http://www.imdb.com/name/nm4110963/,177.0,43.0
+2017,dunkirk,James D'Arcy,COLONEL WINNANT,http://www.imdb.com/name/nm0195439/,176.0,30.0
+2017,dunkirk,Kenneth Branagh,COMMANDER BOLTON,http://www.imdb.com/name/nm0000110/,301.0,45.0
+2017,dunkirk,Mark Rylance,MR. DAWSON,http://www.imdb.com/name/nm0753314/,354.0,62.0
+2017,dunkirk,Tom Glynn-Carney,PETER,http://www.imdb.com/name/nm6077951/,231.0,51.0
+2017,dunkirk,Tom Hardy,FARRIER,http://www.imdb.com/name/nm0362766/,163.0,30.0
+2017,get-out,Allison Williams,ROSE,http://www.imdb.com/name/nm4129745/,1151.0,253.0
+2017,get-out,Betty Gabriel,GEORGINA,http://www.imdb.com/name/nm3340597/,143.0,23.0
+2017,get-out,Bradley Whitford,DEAN,http://www.imdb.com/name/nm0925966/,957.0,140.0
+2017,get-out,Caleb Landry Jones,JEREMY,http://www.imdb.com/name/nm2655177/,459.0,72.0
+2017,get-out,Catherine Keener,MISSY,http://www.imdb.com/name/nm0001416/,554.0,124.0
+2017,get-out,Daniel Kaluuya,CHRIS,http://www.imdb.com/name/nm2257207/,1851.0,434.0
+2017,get-out,Erika Alexander,DETECTIVE LATOYA,http://www.imdb.com/name/nm0004697/,191.0,25.0
+2017,get-out,Lakeith Stanfield,ANDRE + ANDRE/LOGAN,http://www.imdb.com/name/nm3147751/,287.0,40.0
+2017,get-out,Lil Rel Howery,ROD,http://www.imdb.com/name/nm2577076/,837.0,131.0
+2017,get-out,Richard Herd,ROMAN + WALTER/ROMAN,http://www.imdb.com/name/nm0378800/,195.0,23.0
+2017,get-out,Stephen Root,JIM,http://www.imdb.com/name/nm0740535/,469.0,65.0
+2017,lady-bird,Bayne Gibby,CASEY,http://www.imdb.com/name/nm1708795/,115.0,16.0
+2017,lady-bird,Beanie Feldstein,JULIE,http://www.imdb.com/name/nm2788156/,567.0,92.0
+2017,lady-bird,Bob Stephenson,FATHER WALTHER,http://www.imdb.com/name/nm0827307/,111.0,9.0
+2017,lady-bird,Jordan Rodrigues,MIGUEL,http://www.imdb.com/name/nm0735366/,174.0,29.0
+2017,lady-bird,Laurie Metcalf,MARION,http://www.imdb.com/name/nm0582418/,1406.0,176.0
+2017,lady-bird,Lois Smith,SISTER SARAH-JOAN,http://www.imdb.com/name/nm0809135/,258.0,31.0
+2017,lady-bird,Lucas Hedges,DANNY,http://www.imdb.com/name/nm2348627/,521.0,72.0
+2017,lady-bird,Marielle Scott,SHELLY,http://www.imdb.com/name/nm2900746/,118.0,20.0
+2017,lady-bird,Odeya Rush,JENNA,http://www.imdb.com/name/nm3843467/,360.0,55.0
+2017,lady-bird,Saoirse Ronan,CHRISTINE + LADY BIRD,http://www.imdb.com/title/tt7601030/,3125.0,509.0
+2017,lady-bird,Timothee Chalamet,KYLE,http://www.imdb.com/name/nm3154303/,471.0,77.0
+2017,lady-bird,Tracy Letts,LARRY,http://www.imdb.com/name/nm0504832/,438.0,62.0
+2017,phantom-thread,Brian Gleeson,DR ROBERT + DR. HARDY + DR. ROBERT,http://www.imdb.com/name/nm2244852/,319.0,45.0
+2017,phantom-thread,Daniel Day-Lewis,REYNOLDS,http://www.imdb.com/name/nm0000358/,2479.0,366.0
+2017,phantom-thread,Lesley Manville,CYRIL,http://www.imdb.com/name/nm0544334/,659.0,86.0
+2017,phantom-thread,Vicky Krieps,ALMA,http://www.imdb.com/name/nm3043279/,2084.0,286.0
+2017,the-post,Alison Brie,LALLY,http://www.imdb.com/name/nm1555340/,404.0,66.0
+2017,the-post,Bob Odenkirk,BAGDIKIAN,http://www.imdb.com/name/nm0644022/,443.0,72.0
+2017,the-post,Brent Langdon,IGNATIUS + PAUL,http://www.imdb.com/name/nm1225470/,562.0,63.0
+2017,the-post,Bruce Greenwood,MCNAMARA,http://www.imdb.com/name/nm0339304/,302.0,42.0
+2017,the-post,Carrie Coon,MEG,http://www.imdb.com/name/nm4689420/,280.0,35.0
+2017,the-post,Coral Pena,YOUNG WOMAN,http://www.imdb.com/name/nm7408600/,175.0,13.0
+2017,the-post,Dan Bucatinsky,ALSOP,http://www.imdb.com/name/nm0117857/,118.0,16.0
+2017,the-post,David Cross,HOWARD,http://www.imdb.com/name/nm0189144/,472.0,76.0
+2017,the-post,Jesse Plemons,CLARK,http://www.imdb.com/name/nm0687146/,134.0,18.0
+2017,the-post,John Rue,GENE,http://www.imdb.com/name/nm1600051/,178.0,37.0
+2017,the-post,Kelly AuCoin,BALILES,http://www.imdb.com/name/nm1372572/,122.0,6.0
+2017,the-post,Matthew Rhys,ELLSBERG,http://www.imdb.com/name/nm0722629/,219.0,30.0
+2017,the-post,Meryl Streep,KAY,http://www.imdb.com/name/nm0000658/,2783.0,384.0
+2017,the-post,Sarah Paulson,TONY,http://www.imdb.com/name/nm0005299/,330.0,53.0
+2017,the-post,Tom Hanks,BRADLEE,http://www.imdb.com/name/nm0000158/,3863.0,515.0
+2017,the-post,Tracy Letts,FRITZ,http://www.imdb.com/name/nm0504832/,750.0,102.0
+2017,the-shape-of-water,Dan Lett,DEALER,http://www.imdb.com/name/nm0504683/,113.0,22.0
+2017,the-shape-of-water,David Hewlett,FLEMING,http://www.imdb.com/name/nm0382110/,380.0,60.0
+2017,the-shape-of-water,Lauren Lee Smith,ELAINE,http://www.imdb.com/name/nm0809049/,151.0,26.0
+2017,the-shape-of-water,Michael Shannon,STRICKLAND,http://www.imdb.com/name/nm0788335/,2167.0,371.0
+2017,the-shape-of-water,Michael Stuhlbarg,HOFFSTETLER,http://www.imdb.com/name/nm0836121/,880.0,160.0
+2017,the-shape-of-water,Morgan Kelly,PIE GUY,http://www.imdb.com/name/nm1225457/,303.0,51.0
+2017,the-shape-of-water,Nick Searcy,GENERAL HOYT,http://www.imdb.com/name/nm0780678/,379.0,58.0
+2017,the-shape-of-water,Nigel Bennett,MIHALKOV,http://www.imdb.com/name/nm0000911/,253.0,49.0
+2017,the-shape-of-water,Octavia Spencer,ZELDA,http://www.imdb.com/name/nm0818055,1319.0,201.0
+2017,the-shape-of-water,Richard Jenkins,GILES + GILES / NARRATOR,http://www.imdb.com/name/nm0420955/,1935.0,318.0
+2017,the-shape-of-water,Stewart Arnott,BERNIE,http://www.imdb.com/name/nm0036732/,156.0,31.0
+2017,three-billboards-outside-ebbing-missouri,Abbie Cornish,ANNE,http://www.imdb.com/name/nm0180411/,220.0,42.0
+2017,three-billboards-outside-ebbing-missouri,Brendan Sexton III,CROP-HAIRED GUY,http://www.imdb.com/name/nm0786639/,266.0,37.0
+2017,three-billboards-outside-ebbing-missouri,Caleb Landry Jones,RED,http://www.imdb.com/name/nm2655177/,502.0,75.0
+2017,three-billboards-outside-ebbing-missouri,Clarke Peters,ABERCROMBIE,http://www.imdb.com/name/nm0676370/,378.0,43.0
+2017,three-billboards-outside-ebbing-missouri,Darrell Britt-Gibson,JEROME,http://www.imdb.com/name/nm2888524/,163.0,22.0
+2017,three-billboards-outside-ebbing-missouri,Frances McDormand,MILDRED,http://www.imdb.com/name/nm0000531/,2312.0,297.0
+2017,three-billboards-outside-ebbing-missouri,John Hawkes,CHARLIE,http://www.imdb.com/name/nm0370035/,421.0,49.0
+2017,three-billboards-outside-ebbing-missouri,Kathryn Newton,ANGELA,http://www.imdb.com/name/nm1105980/,143.0,19.0
+2017,three-billboards-outside-ebbing-missouri,Kerry Condon,PAMELA,http://www.imdb.com/title/tt5027774/fullcredits,131.0,22.0
+2017,three-billboards-outside-ebbing-missouri,Lucas Hedges,ROBBIE,http://www.imdb.com/name/nm2348627/,314.0,40.0
+2017,three-billboards-outside-ebbing-missouri,Malaya Rivera Drew,GABRIELLA,http://www.imdb.com/name/nm1371862/,241.0,11.0
+2017,three-billboards-outside-ebbing-missouri,Nick Searcy,FATHER MONTGOMERY,http://www.imdb.com/name/nm0780678/,162.0,17.0
+2017,three-billboards-outside-ebbing-missouri,Peter Dinklage,JAMES,http://www.imdb.com/name/nm0227759/,258.0,33.0
+2017,three-billboards-outside-ebbing-missouri,Sam Rockwell,DIXON,http://www.imdb.com/name/nm0005377/,1437.0,226.0
+2017,three-billboards-outside-ebbing-missouri,Samara Weaving,PENELOPE,http://www.imdb.com/name/nm3034977/,166.0,21.0
+2017,three-billboards-outside-ebbing-missouri,Sandy Martin,MOMMA,http://www.imdb.com/name/nm0553036/,190.0,32.0
+2017,three-billboards-outside-ebbing-missouri,Woody Harrelson,WILLOUGHBY,http://www.imdb.com/name/nm0000437/,1829.0,167.0
+2017,three-billboards-outside-ebbing-missouri,Zeljko Ivanek,DESK SERGEANT,http://www.imdb.com/name/nm0411964/,347.0,42.0
