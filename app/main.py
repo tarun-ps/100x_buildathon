@@ -31,7 +31,7 @@ def main():
     for i,question in enumerate(generate_questions_res.questions):
         generate_code_res = generate_code(preliminary_analyse_res.domain, 
                                           preliminary_analyse_res.columns, question, 
-                                          "data/test.csv", f"code_{i}.py", 
+                                          "data/test.csv", f"code/code_{i}.py", 
                                           f"data/transformed_{i}.csv")
         retry = 0
         while retry < 3:
