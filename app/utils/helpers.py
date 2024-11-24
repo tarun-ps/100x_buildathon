@@ -23,6 +23,8 @@ def get_task_data(task_id: str):
     ret_questions = []
     for i, question in enumerate(questions):
         if f"output_{i}.mp4" in videos:
-            ret_questions.append({"question": question, "video": f"{task_id}/video/{i}"})
+            ret_questions.append({"question": question, "video": f"{task_id}/video/{i}", "status": "ready"})
+        else:
+            ret_questions.append({"question": question, "video": None, "status": "processing"})
     ret["questions"] = ret_questions
     return ret

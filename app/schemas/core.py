@@ -32,3 +32,8 @@ class GenerateCodeResponse(BaseModel):
     code: str
     def to_dict(self):
         return self.model_dump()
+    
+class ExtractCSVFromTextResponse(BaseModel):
+    csv: str
+    title: str
+    

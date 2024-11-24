@@ -1,8 +1,10 @@
+import { backendUrl } from '@/lib/utils';
 import React, { useEffect, useState } from 'react';
 
 interface Question {
   question: string;
   video: string;
+  status: string;
 }
 
 interface TaskDetail {
@@ -20,7 +22,7 @@ const TaskDetails: React.FC<{ id: string }> = ({ id }) => {
   useEffect(() => {
     const fetchCreations = async () => {
       try {
-        const response = await fetch(`https://backend.csvgenie.purpleshores.in/tasks/${id}`);
+        const response = await fetch(`${backendUrl}/tasks/${id}`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }
@@ -54,7 +56,9 @@ const TaskDetails: React.FC<{ id: string }> = ({ id }) => {
           {taskDetails?.questions.map((q, index) => (
             <li key={index} className="mb-2">
               <p className="font-semibold">{q.question}</p>
-              <video src={`https://backend.csvgenie.purpleshores.in/tasks/${q.video}`} controls className="mt-1 w-full" />
+              {q.status === 'ready' && <video src={`${backendUrl}/tasks/${q.video}`} controls className="mt-1 w-full" />}
+              {q.status === 'processing' && <p>Processing...</p>}
+              {q.status === 'failed' && <p>Failed</p>}
             </li>
           ))}
         </ul>

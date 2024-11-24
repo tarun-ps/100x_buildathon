@@ -1,7 +1,7 @@
 from fastapi.responses import FileResponse, JSONResponse
 import uvicorn
 from utils.helpers import get_all_tasks, get_task_data
-from main import process, process_csv
+from main import process, process_csv, process_text
 import fastapi
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import UploadFile
@@ -23,6 +23,13 @@ app.add_middleware(
     allow_methods=["*"],     # Allow all HTTP methods
     allow_headers=["*"],     # Allow all headers
 )
+
+#POST API call to take either a csv file as a FormData or a json with a variable called text as input and process it
+
+@app.post("/texttask")
+async def submit_text(data: dict):
+    csv_file_id = str(uuid.uuid4())
+    return JSONResponse(content=process_text(data.get("text"), csv_file_id))
 
 @app.post("/task")
 async def submit_csv(csv_file: UploadFile):

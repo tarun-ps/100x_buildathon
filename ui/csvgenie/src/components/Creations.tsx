@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
-
+import { backendUrl } from '@/lib/utils';
 interface Creation {
   id: string;
   domain: string;
@@ -18,7 +18,7 @@ const Creations: React.FC<CreationsProps> = ({ setSelectedTaskId, setSelectedOpt
   useEffect(() => {
     const fetchCreations = async () => {
       try {
-        const response = await fetch('https://backend.csvgenie.purpleshores.in/tasks');
+        const response = await fetch(`${backendUrl}/tasks`);
         if (!response.ok) {
           throw new Error('Network response was not ok');
         }

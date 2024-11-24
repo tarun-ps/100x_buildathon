@@ -2,10 +2,19 @@
 
 import React, { useState } from 'react';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from './ui/tabs';
+import { backendUrl } from '@/lib/utils';
 
 const LandingPage: React.FC = () => {
   const [csvFile, setCsvFile] = useState<File | null>(null);
   const [textInput, setTextInput] = useState('');
+
+  // State for CSV Submit Button
+  const [isCsvSubmitting, setIsCsvSubmitting] = useState(false);
+  const [csvSubmitButtonText, setCsvSubmitButtonText] = useState('Upload CSV');
+
+  // State for Text Submit Button
+  const [isTextSubmitting, setIsTextSubmitting] = useState(false);
+  const [textSubmitButtonText, setTextSubmitButtonText] = useState('Submit Text');
 
   const handleCsvSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,18 +24,28 @@ const LandingPage: React.FC = () => {
     formData.append('csv_file', csvFile);
 
     try {
-      const response = await fetch('https://backend.csvgenie.purpleshores.in/task', {
+      // Disable submit button and show a processing message
+      setIsCsvSubmitting(true);
+      setCsvSubmitButtonText('Processing...');
+      
+      const response = await fetch(`${backendUrl}/task`, {
         method: 'POST',
         body: formData,
       });
-      // is response is success, show a modal with the task id and domain
+
       if (response.ok) {
         const data = await response.json();
-        // show a modal with the task id and domain
         alert(`Task ID: ${data.id}\nDomain: ${data.domain}`);
+      } else {
+        alert('Failed to upload CSV.');
       }
     } catch (error) {
       console.error('Error uploading CSV:', error);
+      alert('An error occurred while uploading the CSV.');
+    } finally {
+      // Re-enable submit button and reset button text
+      setIsCsvSubmitting(false);
+      setCsvSubmitButtonText('Upload CSV');
     }
   };
 
@@ -34,20 +53,31 @@ const LandingPage: React.FC = () => {
     e.preventDefault();
 
     try {
-      const response = await fetch('/api/submit', {
+      // Disable submit button and show a processing message
+      setIsTextSubmitting(true);
+      setTextSubmitButtonText('Processing...');
+      
+      const response = await fetch(`${backendUrl}/texttask`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ text: textInput }),
       });
-      // is response is success, show a modal with the task id and domain
+
       if (response.ok) {
         const data = await response.json();
-        console.log(data);
+        alert(`Task ID: ${data.id}\nDomain: ${data.domain}`);
+      } else {
+        alert('Failed to submit text.');
       }
     } catch (error) {
       console.error('Error submitting text:', error);
+      alert('An error occurred while submitting the text.');
+    } finally {
+      // Re-enable submit button and reset button text
+      setIsTextSubmitting(false);
+      setTextSubmitButtonText('Submit Text');
     }
   };
 
@@ -77,9 +107,12 @@ const LandingPage: React.FC = () => {
             />
             <button
               type="submit"
-              className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+              disabled={isCsvSubmitting}
+              className={`bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 ${
+                isCsvSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
-              Upload CSV
+              {csvSubmitButtonText}
             </button>
           </form>
         </TabsContent>
@@ -95,9 +128,12 @@ const LandingPage: React.FC = () => {
             />
             <button
               type="submit"
-              className="bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700"
+              disabled={isTextSubmitting}
+              className={`bg-gray-600 text-white px-4 py-2 rounded hover:bg-gray-700 ${
+                isTextSubmitting ? 'opacity-50 cursor-not-allowed' : ''
+              }`}
             >
-              Submit Text
+              {textSubmitButtonText}
             </button>
           </form>
         </TabsContent>

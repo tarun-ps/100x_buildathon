@@ -1,8 +1,9 @@
 import json
 import uuid
-from tasks.core import generate_animated_video_horizontal_bar, generate_animated_video_pie_chart, \
+from schemas.core import ExtractCSVFromTextResponse
+from tasks.core import generate_animated_video_horizontal_bar, generate_animated_video_pie_chart, generate_videos_for_text_input, \
     preliminary_analyse, generate_questions, \
-    eliminate_unimportant_columns, generate_code_and_videos
+    eliminate_unimportant_columns, generate_code_and_videos, extract_csv_from_text
 import os
 # from dotenv import load_dotenv
 
@@ -12,6 +13,19 @@ def cleanup_folders():
     os.system("rm -rf code/*")
     os.system("rm -rf frames/*")
     os.system("rm -rf data/transformed_*.csv")
+
+def process_text(text: str, task_id: str):
+    create_task_folder(task_id)
+    res = extract_csv_from_text(text, task_id)
+    domain = res.title
+    json_data = {"preliminary_analyse": {"domain": domain}, "questions": {"questions": [text[:100]]}}
+    with open(f"user_data/{task_id}/metadata.json", "w") as f:
+        json.dump(json_data, f)
+    return process_user_text(res, task_id)
+
+def process_user_text(res: ExtractCSVFromTextResponse, task_id: str):
+    generate_videos_for_text_input.delay(task_id, res.title)
+    return {"id": task_id, "status": "processing", "domain": res.title[:100]}
 
 def process(task_id: str):
     create_task_folder(task_id)
@@ -64,11 +78,13 @@ def generate_all_videos():
    
 if __name__ == "__main__":
     task_id = str(uuid.uuid4())
-    create_task_folder(task_id)
-    os.system(f"cp data/actor-metrics.csv user_data/{task_id}/raw.csv")
-    process(task_id)
+    # create_task_folder(task_id)
+    # os.system(f"cp data/actor-metrics.csv user_data/{task_id}/raw.csv")
+    # process(task_id)
     #generate_animated_video(f"output/graph_1.svg", f"output/output_1.mp4", GraphType.BAR)
     # generate_svg_res = generate_svg("question", 
     #                                 f"data/transformed_3.csv", GraphType.HORIZONTAL_BAR,
     #                                 f"output/graph_3.svg")
     # print(generate_svg_res)
+    t = "20% of users own an iPhone, 50% own a Samsung, and the rest own a variety of brands"
+    print(process_text(t, task_id))

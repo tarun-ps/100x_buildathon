@@ -1,10 +1,6 @@
-from enum import Enum
 import subprocess
-from pydantic import BaseModel
 from openai import OpenAI
-from settings import OPENAI_O1_PREVIEW_MODEL, \
-    OPENAI_API_KEY, OPENAI_API_BASE_URL, \
-    PRELIMINARY_ANALYSE_SYSTEM_PROMPT, \
+from settings import PRELIMINARY_ANALYSE_SYSTEM_PROMPT, \
     PRELIMINARY_ANALYSE_USER_PROMPT, \
     OPENAI_GPT4_O_MODEL, \
     GENERATE_QUESTIONS_SYSTEM_PROMPT, \
@@ -12,7 +8,8 @@ from settings import OPENAI_O1_PREVIEW_MODEL, \
     PICK_GRAPH_TYPE_SYSTEM_PROMPT, \
     PICK_GRAPH_TYPE_USER_PROMPT, \
     GENERATE_CODE_SYSTEM_PROMPT, \
-    GENERATE_CODE_USER_PROMPT
+    GENERATE_CODE_USER_PROMPT, \
+    EXTRACT_CSV_FROM_TEXT_SYSTEM_PROMPT
 import json
 import pandas as pd
 import pygal
@@ -20,7 +17,6 @@ from pygal.style import Style
 import numpy as np
 from bs4 import BeautifulSoup
 import os
-import cairosvg
 from schemas.core import *
 from celery import Celery
 
@@ -398,33 +394,63 @@ def generate_animated_video(file_path: str, output_file_path: str, graph_type: G
     os.system(ffmpeg_command)
     return
 
+
+@app.task
+def generate_videos_for_text_input(task_id, title):
+    pick_graph_type_res = pick_graph_type(title, 
+                                          f"user_data/{task_id}/raw.csv")
+    generate_svg_res = generate_svg(title, 
+                                f"user_data/{task_id}/raw.csv", pick_graph_type_res.graph_type,
+                                f"user_data/{task_id}/output/graph_0.svg")
+    generate_animated_video(f"user_data/{task_id}/output/graph_0.svg", 
+                            f"user_data/{task_id}/output/output_0.mp4", 
+                            pick_graph_type_res.graph_type, task_id)
 @app.task
 def generate_code_and_videos(task_id, preliminary_analyse_res, generate_questions_res):
     preliminary_analyse_res = PreliminaryAnalyseResponse.model_validate_json(preliminary_analyse_res)
     generate_questions_res = GenerateQuestionsResponse.model_validate_json(generate_questions_res)
     for i,question in enumerate(generate_questions_res.questions):
-        generate_code_res = generate_code(preliminary_analyse_res.domain, 
-                                          preliminary_analyse_res.columns, question, 
-                                          f"user_data/{task_id}/transformed.csv", f"user_data/{task_id}/code/code_{i}.py", 
-                                          f"user_data/{task_id}/transformed_{i}.csv")
-        retry = 0
-        while retry < 3:
-            try:
-                exec(generate_code_res.code)
-                break
-            except Exception as e:
-                retry += 1
-                generate_code_res = generate_code(preliminary_analyse_res.domain, 
-                                          preliminary_analyse_res.columns, question, 
-                                          f"user_data/{task_id}/transformed.csv", f"user_data/{task_id}/code/code_{i}.py", 
-                                          f"user_data/{task_id}/transformed_{i}.csv")
-        pick_graph_type_res = pick_graph_type(question, 
-                                          f"user_data/{task_id}/transformed_{i}.csv")
-        print(pick_graph_type_res)
-        generate_svg_res = generate_svg(question, 
-                                    f"user_data/{task_id}/transformed_{i}.csv", pick_graph_type_res.graph_type,
-                                    f"user_data/{task_id}/output/graph_{i}.svg")
-        print(generate_svg_res)
-        generate_animated_video(f"user_data/{task_id}/output/graph_{i}.svg", 
-                                f"user_data/{task_id}/output/output_{i}.mp4", 
-                                pick_graph_type_res.graph_type, task_id)
+        try:
+            generate_code_res = generate_code(preliminary_analyse_res.domain, 
+                                            preliminary_analyse_res.columns, question, 
+                                            f"user_data/{task_id}/transformed.csv", f"user_data/{task_id}/code/code_{i}.py", 
+                                            f"user_data/{task_id}/transformed_{i}.csv")
+            retry = 0
+            while retry < 3:
+                try:
+                    exec(generate_code_res.code)
+                    break
+                except Exception as e:
+                    retry += 1
+                    generate_code_res = generate_code(preliminary_analyse_res.domain, 
+                                            preliminary_analyse_res.columns, question, 
+                                            f"user_data/{task_id}/transformed.csv", f"user_data/{task_id}/code/code_{i}.py", 
+                                            f"user_data/{task_id}/transformed_{i}.csv")
+            pick_graph_type_res = pick_graph_type(question, 
+                                            f"user_data/{task_id}/transformed_{i}.csv")
+            print(pick_graph_type_res)
+            generate_svg_res = generate_svg(question, 
+                                        f"user_data/{task_id}/transformed_{i}.csv", pick_graph_type_res.graph_type,
+                                        f"user_data/{task_id}/output/graph_{i}.svg")
+            print(generate_svg_res)
+            generate_animated_video(f"user_data/{task_id}/output/graph_{i}.svg", 
+                                    f"user_data/{task_id}/output/output_{i}.mp4", 
+                                    pick_graph_type_res.graph_type, task_id)
+        except Exception as e:
+            print(e)
+
+def extract_csv_from_text(text: str, task_id: str):
+    with open(f"user_data/{task_id}/raw.txt", "w") as file:
+        file.write(text)
+    completion = client.beta.chat.completions.parse(
+        model=OPENAI_GPT4_O_MODEL,
+        response_format=ExtractCSVFromTextResponse,
+        messages=[
+            {"role": "system", "content": EXTRACT_CSV_FROM_TEXT_SYSTEM_PROMPT},
+            {"role": "user", "content": text},
+        ],
+    )
+    ret = ExtractCSVFromTextResponse.parse_obj(json.loads(completion.choices[0].message.content))
+    with open(f"user_data/{task_id}/raw.csv", "w") as file:
+        file.write(ret.csv)
+    return ret
