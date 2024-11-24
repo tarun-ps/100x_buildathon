@@ -19,8 +19,9 @@ from bs4 import BeautifulSoup
 import os
 from schemas.core import *
 from celery import Celery
+from settings import REDIS_BROKER_URL
 
-app = Celery(broker='redis://localhost:6379/0')
+app = Celery(broker=REDIS_BROKER_URL)
 client = OpenAI()
 
 
