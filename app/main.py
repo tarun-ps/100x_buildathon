@@ -1,11 +1,9 @@
 import json
 import uuid
-from tasks.core import generate_animated_video_horizontal_bar, generate_animated_video_pie_chart, generate_code, preliminary_analyse, generate_questions, \
-    generate_svg, generate_animated_svg, generate_animated_video, pick_graph_type, \
-    eliminate_unimportant_columns, GraphType
+from tasks.core import generate_animated_video_horizontal_bar, generate_animated_video_pie_chart, \
+    preliminary_analyse, generate_questions, \
+    eliminate_unimportant_columns, generate_code_and_videos
 import os
-from svglib.svglib import svg2rlg
-from reportlab.graphics import renderPM
 # from dotenv import load_dotenv
 
 # load_dotenv("dev.env")
@@ -16,13 +14,14 @@ def cleanup_folders():
     os.system("rm -rf data/transformed_*.csv")
 
 def process(task_id: str):
-    process_csv(f"user_data/{task_id}/raw.csv", task_id)
+    create_task_folder(task_id)
+    return process_csv(f"user_data/{task_id}/raw.csv", task_id)
 
 def create_task_folder(task_id: str):
-    os.mkdir(f"user_data/{task_id}")
-    os.mkdir(f"user_data/{task_id}/code")
-    os.mkdir(f"user_data/{task_id}/frames")
-    os.mkdir(f"user_data/{task_id}/output")
+    os.makedirs(f"user_data/{task_id}", exist_ok=True)
+    os.makedirs(f"user_data/{task_id}/code", exist_ok=True)
+    os.makedirs(f"user_data/{task_id}/frames", exist_ok=True)
+    os.makedirs(f"user_data/{task_id}/output", exist_ok=True)
 
 def process_csv(csv_file_path: str, task_id: str):
     cleanup_folders()
@@ -38,36 +37,10 @@ def process_csv(csv_file_path: str, task_id: str):
     with open(f"user_data/{task_id}/metadata.json", "w") as f:
         json.dump(metadata, f)
 
-    for i,question in enumerate(generate_questions_res.questions):
-        generate_code_res = generate_code(preliminary_analyse_res.domain, 
-                                          preliminary_analyse_res.columns, question, 
-                                          f"user_data/{task_id}/transformed.csv", f"user_data/{task_id}/code/code_{i}.py", 
-                                          f"user_data/{task_id}/transformed_{i}.csv")
-        retry = 0
-        while retry < 3:
-            try:
-                exec(generate_code_res.code)
-                break
-            except Exception as e:
-                retry += 1
-                generate_code_res = generate_code(preliminary_analyse_res.domain, 
-                                          preliminary_analyse_res.columns, question, 
-                                          f"user_data/{task_id}/transformed.csv", f"user_data/{task_id}/code/code_{i}.py", 
-                                          f"user_data/{task_id}/transformed_{i}.csv")
-        pick_graph_type_res = pick_graph_type(question, 
-                                          f"user_data/{task_id}/transformed_{i}.csv")
-        print(pick_graph_type_res)
-        generate_svg_res = generate_svg(question, 
-                                    f"user_data/{task_id}/transformed_{i}.csv", pick_graph_type_res.graph_type,
-                                    f"user_data/{task_id}/output/graph_{i}.svg")
-        print(generate_svg_res)
-        generate_animated_video(f"user_data/{task_id}/output/graph_{i}.svg", 
-                                f"user_data/{task_id}/output/output_{i}.mp4", 
-                                pick_graph_type_res.graph_type, task_id)
-    # generate_animated_svg("graph.svg")
-    # generate_animated_video("graph.svg")
-    # 
-    # print(res)
+    generate_code_and_videos.delay(task_id, json.dumps(preliminary_analyse_res.to_dict()), json.dumps(generate_questions_res.to_dict()))
+    return {"id": task_id, "status": "processing", "domain": preliminary_analyse_res.domain}
+
+
 def generate_pie_chart_video() -> str:
     csv = "data/transformed_0.csv"
     # generate_svg_res = generate_svg("", csv, 

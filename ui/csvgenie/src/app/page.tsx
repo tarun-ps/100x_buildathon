@@ -1,13 +1,13 @@
 'use client'
 
-import React from 'react';
-import LandingPage from '@/components/LandingPage';
-import Creations from '@/components/Creations';
-import { useState } from 'react';
-import { PlusIcon, EyeIcon } from '@heroicons/react/24/solid';
+import React, { useState } from 'react'
+import LandingPage from '@/components/LandingPage'
+import Creations from '@/components/Creations'
+import { PlusIcon, EyeIcon } from '@heroicons/react/24/solid'
+import { NavigationButton } from '@/components/NavigationButton'
 
 const Page: React.FC = () => {
-  const [selectedOption, setSelectedOption] = useState<'create' | 'view'>('create');
+  const [selectedOption, setSelectedOption] = useState<'create' | 'view'>('create')
 
   return (
     <main className="min-h-screen flex">
@@ -22,26 +22,18 @@ const Page: React.FC = () => {
         </div>
 
         {/* Create Button */}
-        <button
-          className={`w-full text-left p-2 flex items-center text-white rounded ${
-            selectedOption === 'create' ? 'bg-gray-700' : 'hover:bg-gray-600'
-          }`}
-          onClick={() => setSelectedOption('create')}
-        >
-          <PlusIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-          Create
-        </button>
+        <NavigationButton
+          label="create"
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
 
         {/* View Button */}
-        <button
-          className={`w-full text-left p-2 flex items-center text-white rounded mt-2 ${
-            selectedOption === 'view' ? 'bg-gray-700' : 'hover:bg-gray-600'
-          }`}
-          onClick={() => setSelectedOption('view')}
-        >
-          <EyeIcon className="h-5 w-5 mr-2" aria-hidden="true" />
-          View
-        </button>
+        <NavigationButton
+          label="view"
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
       </aside>
 
       {/* Main Content */}
@@ -50,7 +42,7 @@ const Page: React.FC = () => {
         {selectedOption === 'view' && <Creations />}
       </div>
     </main>
-  );
-};
+  )
+}
 
-export default Page;
+export default Page 

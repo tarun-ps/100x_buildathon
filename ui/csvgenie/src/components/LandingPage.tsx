@@ -12,14 +12,19 @@ const LandingPage: React.FC = () => {
     if (!csvFile) return;
 
     const formData = new FormData();
-    formData.append('file', csvFile);
+    formData.append('csv_file', csvFile);
 
     try {
-      const response = await fetch('/api/submit', {
+      const response = await fetch('http://localhost:8000/task', {
         method: 'POST',
         body: formData,
       });
-      // Handle response
+      // is response is success, show a modal with the task id and domain
+      if (response.ok) {
+        const data = await response.json();
+        // show a modal with the task id and domain
+        alert(`Task ID: ${data.id}\nDomain: ${data.domain}`);
+      }
     } catch (error) {
       console.error('Error uploading CSV:', error);
     }
@@ -36,7 +41,11 @@ const LandingPage: React.FC = () => {
         },
         body: JSON.stringify({ text: textInput }),
       });
-      // Handle response
+      // is response is success, show a modal with the task id and domain
+      if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      }
     } catch (error) {
       console.error('Error submitting text:', error);
     }
