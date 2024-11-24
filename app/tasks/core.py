@@ -1,4 +1,5 @@
 from enum import Enum
+import subprocess
 from pydantic import BaseModel
 from openai import OpenAI
 from settings import OPENAI_O1_PREVIEW_MODEL, \
@@ -24,20 +25,6 @@ import os
 from PIL import Image
 client = OpenAI()
 
-class PreliminaryAnalyseResponse(BaseModel):
-    domain: str
-    columns: list[str]
-
-class GenerateQuestionsResponse(BaseModel):
-    questions: list[str]
-
-class PickGraphTypeResponse(BaseModel):
-    graph_type: str
-    reason: str
-
-class GenerateCodeResponse(BaseModel):
-    code: str
-
 class GraphType(Enum):
     LINE = "line"
     HORIZONTAL_LINE = "horizontal_line"
@@ -47,6 +34,20 @@ class GraphType(Enum):
     HORIZONTAL_BAR = "horizontal_bar"
     PIE = "pie"
     DONUT = "donut"
+
+class PreliminaryAnalyseResponse(BaseModel):
+    domain: str
+    columns: list[str]
+
+class GenerateQuestionsResponse(BaseModel):
+    questions: list[str]
+
+class PickGraphTypeResponse(BaseModel):
+    graph_type: GraphType
+    reason: str
+
+class GenerateCodeResponse(BaseModel):
+    code: str
 
 def preliminary_analyse(file_path: str) -> PreliminaryAnalyseResponse:
     df = pd.read_csv(file_path)
@@ -160,26 +161,37 @@ def generate_svg(question: str, file_path: str, graph_type: str = "line", output
         font_family='googlefont:Raleway',
         transition='4000ms ease-in')
     df = pd.read_csv(file_path)
-    if graph_type == "line":
+
+    if graph_type == GraphType.LINE:
         graph = pygal.Line(style=custom_style, interpolate='cubic')
-    elif graph_type == "horizontal_line":
+    elif graph_type == GraphType.HORIZONTAL_LINE:
         graph = pygal.HorizontalLine(style=custom_style)
-    elif graph_type == "stacked_line":
+    elif graph_type == GraphType.STACKED_LINE:
         graph = pygal.StackedLine(style=custom_style, interpolate='cubic')
-    elif graph_type == "bar":
+    elif graph_type == GraphType.BAR:
         graph = pygal.Bar(style=custom_style)
-    elif graph_type == "stacked_bar":
+    elif graph_type == GraphType.STACKED_BAR:
         graph = pygal.StackedBar(style=custom_style)
-    elif graph_type == "horizontal_bar":
+    elif graph_type == GraphType.HORIZONTAL_BAR:
         graph = pygal.HorizontalBar(style=custom_style)
-    elif graph_type == "pie":
+    elif graph_type == GraphType.PIE:
         graph = pygal.Pie(style=custom_style)
-    elif graph_type == "donut":
+    elif graph_type == GraphType.DONUT:
         graph = pygal.Pie(style=custom_style, inner_radius=0.40)
     graph.title = question
-    graph.x_labels = df[df.columns[0]]
-    for column in df.columns[1:]:
-        graph.add(column, df[column].replace([np.nan], None))
+    if graph_type == GraphType.PIE or graph_type == GraphType.DONUT:
+        for _, row in df.iterrows():
+            graph.add(row[0], row[1])
+    else:
+        graph.x_labels = df[df.columns[0]].astype(str)
+
+        for column in df.columns[1:]:
+            if pd.api.types.is_numeric_dtype(df[column]):
+                y_values = df[column].replace({np.nan: None}).tolist()
+                graph.add(column, y_values)
+            else:
+                graph.add(column, df[column].astype(str).replace({"": None}).tolist())
+
     graph.render_to_file(output_file_path)
     return output_file_path
 
@@ -207,6 +219,80 @@ def generate_animated_svg(svg_file_path: str) -> str:
         file.write(html)
     return svg_output_path
 
+def generate_animated_video_pie_chart(svg_file_path: str) -> str:
+    mask = """
+    <mask id="reveal-mask"> 
+        <rect x="0" y="0" width="800" height="600" fill="black"></rect>
+        <path d="{path_d}" fill="white"></path>
+    </mask>
+    """
+    with open(svg_file_path, "r") as file:
+        svg = file.read()
+    #get all the path nodes uder a g tag wioth class called "series" using beautifulsoup
+    
+    #mask  = BeautifulSoup(mask, "xml")
+    total_frames = 60
+    output_dir = "frames"
+    center_x = 306
+    center_y = 280
+    radius = 252
+    x1 = center_x + radius * np.cos(np.radians(0))
+    y1 = center_y + radius * np.sin(np.radians(0))   
+    os.makedirs(output_dir, exist_ok=True)
+    for frame in range(1,2,1):
+        soup = BeautifulSoup(svg, "xml")
+        angle = 360 * frame / total_frames
+        x2 = center_x + radius * np.cos(np.radians(angle))
+        y2 = center_y + radius * np.sin(np.radians(angle))
+        path_d = f"M{center_x} {center_y} L{x1} {y1} A{radius} {radius} 0 1 1 {x2} {y2} L{center_x} {center_y} Z"
+        temp_mask = mask.replace("{path_d}", path_d)
+        print(temp_mask)
+        mask_soup = BeautifulSoup(temp_mask, "xml")
+        defs_tag = soup.find("defs")
+        if not defs_tag:
+            defs_tag = soup.new_tag("defs")
+            soup.svg.insert(0, defs_tag)
+        defs_tag.append(mask_soup)
+        paths = soup.find_all("path", class_="slice reactive tooltip-trigger")
+        for path in paths:
+            path["mask"] = "url(#reveal-mask)"
+        svg_generated = soup.prettify()
+        frame_file = os.path.join(output_dir, f"frame_{frame:04d}.png")
+        #cairosvg.svg2png(bytestring=svg_generated.encode('utf-8'), write_to=frame_file)
+        with open(frame_file.replace(".png", ".svg"), "w") as file:
+            file.write(svg_generated)
+        subprocess.run(["magick", frame_file.replace(".png", ".svg"), frame_file])
+        print(f"Generated frame: {frame_file}")
+    return output_dir
+
+def generate_animated_video_horizontal_bar(svg_file_path: str) -> str:
+    mask = "<mask id=\"reveal-mask\"> <rect x=\"0\" y=\"0\" width=\"{width}\" height=\"600\" fill=\"white\" id=\"mask-rect\"></rect></mask>"
+    with open(svg_file_path, "r") as file:
+        svg = file.read()
+    #get all the path nodes uder a g tag wioth class called "series" using beautifulsoup
+    soup = BeautifulSoup(svg, "xml")
+    mask  = BeautifulSoup(mask, "xml")
+    #add mask as the first child of the svg tag in soup
+    soup.svg.insert(0, mask)
+    paths = soup.find_all("rect", class_="rect reactive tooltip-trigger")
+    for path in paths:
+        path["mask"] = "url(#reveal-mask)"
+    svg = soup.prettify()
+    #convert svg to string
+    svg_template = str(svg)
+    final_width = 800
+    total_frames = 60
+    output_dir = "frames"
+    os.makedirs(output_dir, exist_ok=True)
+    for frame in range(total_frames):
+        width = int(frame * (final_width / total_frames))
+        svg_frame = svg_template.replace("{width}", str(width))
+        frame_file = os.path.join(output_dir, f"frame_{frame:04d}.png")
+        cairosvg.svg2png(bytestring=svg_frame, write_to=frame_file)
+        #print(f"Generated frame: {frame_file}")
+    return output_dir
+
+
 def generate_animated_video(svg_file_path: str) -> str:
     mask = "<mask id=\"reveal-mask\"> <rect x=\"0\" y=\"0\" width=\"{width}\" height=\"600\" fill=\"white\" id=\"mask-rect\"></rect></mask>"
     with open(svg_file_path, "r") as file:
@@ -231,5 +317,5 @@ def generate_animated_video(svg_file_path: str) -> str:
         svg_frame = svg_template.replace("{width}", str(width))
         frame_file = os.path.join(output_dir, f"frame_{frame:04d}.png")
         cairosvg.svg2png(bytestring=svg_frame, write_to=frame_file)
-        print(f"Generated frame: {frame_file}")
+        #print(f"Generated frame: {frame_file}")
     return output_dir
