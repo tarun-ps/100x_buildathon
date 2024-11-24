@@ -26,7 +26,7 @@ app = Celery(broker=REDIS_BROKER_URL, bind=True)
 client = OpenAI()
 logging.basicConfig(filename="app.log", level=logging.INFO)
 logger = logging.getLogger(__name__)
-task_logger = get_task_logger(__name__)
+task_logger = logger
 
 def preliminary_analyse(file_path: str) -> PreliminaryAnalyseResponse:
     df = pd.read_csv(file_path)
@@ -399,8 +399,8 @@ def generate_animated_video(file_path: str, output_file_path: str, graph_type: G
     return
 
 
-@app.task(bind=True)
-def generate_videos_for_text_input(self, task_id, title):
+@app.task()
+def generate_videos_for_text_input(task_id, title):
     task_logger = get_task_logger(__name__)
     task_logger.info(f"In task: Generating videos for task {task_id}")
     pick_graph_type_res = pick_graph_type(title, 
@@ -413,8 +413,8 @@ def generate_videos_for_text_input(self, task_id, title):
                             pick_graph_type_res.graph_type, task_id)
     task_logger.info(f"In task: Finished generating videos for task {task_id}")
     
-@app.task(bind=True)
-def generate_code_and_videos(self, task_id, preliminary_analyse_res, generate_questions_res):
+@app.task()
+def generate_code_and_videos(task_id, preliminary_analyse_res, generate_questions_res):
     task_logger = get_task_logger(__name__)
     task_logger.info(f"In task: Generating code and videos for task {task_id}")
     preliminary_analyse_res = PreliminaryAnalyseResponse.model_validate_json(preliminary_analyse_res)
