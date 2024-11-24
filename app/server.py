@@ -10,10 +10,7 @@ import os
 import json
 
 app = fastapi.FastAPI()
-origins = [
-    "http://localhost:3000",  # Frontend URL
-    # Add other allowed origins if needed
-]
+origins = ["*"]
 
 # Add CORS middleware
 app.add_middleware(
