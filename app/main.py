@@ -30,7 +30,7 @@ def process_text(text: str, task_id: str):
 
 def process_user_text(res: ExtractCSVFromTextResponse, task_id: str):
     logger.info(f"In main: Generating videos for task {task_id}")
-    generate_videos_for_text_input(task_id, res.title)
+    generate_videos_for_text_input.delay(task_id, res.title)
     return {"id": task_id, "status": "processing", "domain": res.title[:100]}
 
 def process(task_id: str):
@@ -58,7 +58,7 @@ def process_csv(csv_file_path: str, task_id: str):
     with open(f"user_data/{task_id}/metadata.json", "w") as f:
         json.dump(metadata, f)
 
-    generate_code_and_videos(task_id, json.dumps(preliminary_analyse_res.to_dict()), json.dumps(generate_questions_res.to_dict()))
+    generate_code_and_videos.delay(task_id, json.dumps(preliminary_analyse_res.to_dict()), json.dumps(generate_questions_res.to_dict()))
     return {"id": task_id, "status": "processing", "domain": preliminary_analyse_res.domain}
 
 

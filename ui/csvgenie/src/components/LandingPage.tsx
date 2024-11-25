@@ -85,10 +85,16 @@ const LandingPage: React.FC = () => {
     <div className="container mx-auto p-4 bg-gray-50 text-gray-900">
       <Tabs defaultValue="csv" className="w-full">
         <TabsList className="flex space-x-1 bg-gray-500 p-1 rounded-md">
-          <TabsTrigger value="csv" className="flex-1 text-center text-white">
+          <TabsTrigger
+            value="csv"
+            className="flex-1 text-center text-white data-[state=active]:text-black"
+          >
             CSV
           </TabsTrigger>
-          <TabsTrigger value="text" className="flex-1 text-center text-white">
+          <TabsTrigger
+            value="text"
+            className="flex-1 text-center text-white data-[state=active]:text-black"
+          >
             Text
           </TabsTrigger>
         </TabsList>

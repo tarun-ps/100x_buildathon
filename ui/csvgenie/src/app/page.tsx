@@ -14,7 +14,7 @@ const Page: React.FC = () => {
       <aside className="w-1/4 bg-gray-500 shadow p-4">
         {/* Logo and Subheadline */}
         <div className="flex items-center mb-6">
-          <img src="/logo_cropped.png" alt="csvgenie" className="h-16 w-16 mr-2" />
+          <img src="/genie.png" alt="csvgenie" className="h-16 w-16 mr-2" />
           <div>
             <h1 className="text-white text-2xl font-bold">csvgenie</h1>
             <p className="text-white text-sm">A Purple Shores product</p>
